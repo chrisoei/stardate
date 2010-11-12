@@ -22,17 +22,8 @@ public class StarDate {
 	public static final double MINUTE = 1.9013259e-06;
 	public static final double HOUR = 0.00011407955;
 	public static final double DAY = 0.0027379093;
-
-	public static final double FallOfRome = 476.6747495446266;
-	public static final double MayerRothschildBorn = 1744.1446948998178;
-	public static final double BlackFriday = 1869.7307077625571; // Gould gold
-																	// scheme
-	public static final double BlackThursday = 1929.8130136986301;
-	public static final double MicrosoftIPO = 1986.1961757990869;
-	public static final double September11 = 2001.6946061643835;
-	public static final double MadoffConfession = 2008.9404599271402;
-
-	public static final String VERSION = "1.1.0";
+	public static final String VERSION = "2.0.0";
+	public static final String helpURL = "http://jarvis/notes/StarDateHelp";
 
 	static Logger logger = Logger.getLogger(StarDate.class);
 
@@ -115,18 +106,6 @@ public class StarDate {
 		return String.format(StandardDateFormat, cal);
 	}
 
-	public String getHTML(String timezoneString) {
-		String r = "<a href='http://www.oei.me/stardate.php/";
-		r += y;
-		r += "/" + timezoneString;
-		r += "' title='";
-		r += getStandardDateString(timezoneString);
-		r += "'>";
-		r += y;
-		r += "</a>";
-		return r;
-	}
-
 	/**
 	 * Get the Calendar representation of the StarDate object.
 	 * 
@@ -140,7 +119,7 @@ public class StarDate {
 		cal.setTimeInMillis((long) (t0 + (t1 - t0) * (y - y0)));
 		return cal;
 	}
-	
+
 	public String getYearString() {
 		return Integer.toString((int) y);
 	}
@@ -190,8 +169,10 @@ public class StarDate {
 	/**
 	 * java com.nestria.sim.StarDate "America/Los_Angeles" 2010 2 27 8 33
 	 * computes the StarDate for 2/27/2010 08:33 AM PST.
+	 * 
+	 * @throws Exception
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		int sz = args.length;
 		// If no args, then return current StarDate.
 		if (sz == 0) {
@@ -202,6 +183,8 @@ public class StarDate {
 		if (sz == 1) {
 			if (args[0].equals("--version")) {
 				System.out.println(VERSION);
+			} else if (args[0].equals("--help")) {
+				java.awt.Desktop.getDesktop().browse(java.net.URI.create(helpURL));
 			} else {
 				StarDate sd = new StarDate(Double.valueOf(args[0]));
 				System.out
@@ -209,10 +192,11 @@ public class StarDate {
 			}
 			System.exit(0);
 		}
-		
+
 		if ((sz > 1) && args[0].equals("--file")) {
 			if (sz == 2) {
-				System.out.println(new StarDate(new Date((new File(args[1])).lastModified())));
+				System.out.println(new StarDate(new Date((new File(args[1]))
+						.lastModified())));
 				System.exit(0);
 			} else {
 				logger.error("Unknown usage.");
@@ -221,7 +205,8 @@ public class StarDate {
 		}
 		if ((sz > 1) && args[0].equals("--rfc2822")) {
 			if (sz == 2) {
-				SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+				SimpleDateFormat format = new SimpleDateFormat(
+						"EEE, dd MMM yyyy HH:mm:ss Z");
 				try {
 					System.out.println(new StarDate(format.parse(args[1])));
 				} catch (ParseException e) {
