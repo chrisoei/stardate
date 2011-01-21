@@ -16,6 +16,8 @@ import java.util.Locale;
 
 import org.apache.log4j.*;
 
+// Note that all unit tests have been moved to a separate project (TestStarDate) so that the StarDate
+// jar files are as lean as possible.
 public class StarDate {
 	protected static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 	protected static final Locale LOCALE = Locale.ENGLISH;
@@ -250,7 +252,7 @@ public class StarDate {
 				cal.set(Calendar.SECOND, 0);
 				cal.set(Calendar.MILLISECOND, 0);
 				START_OF_YEAR[y] = cal.getTimeInMillis();
-				log.info("cache store for year " + y + ": " + START_OF_YEAR[y]);
+//				log.info("cache store for year " + y + ": " + START_OF_YEAR[y]);
 				return START_OF_YEAR[y];
 			}
 		}
@@ -281,7 +283,7 @@ public class StarDate {
 		int sz = args.length;
 		// If no args, then return current StarDate.
 		if (sz == 0) {
-			System.out.println(new StarDate());
+			System.out.println(StarDate.getCurrentStarDate());
 			System.exit(0);
 		}
 		// If only 1 arg, assume it is a StarDate to be converted to Date/Time
