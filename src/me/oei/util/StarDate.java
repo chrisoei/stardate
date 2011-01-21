@@ -141,9 +141,10 @@ public class StarDate {
 		cal.set(Calendar.SECOND, second);
 		return getStarDate(cal);
 	}
-	
+
 	/**
-	 * @param x	The date in RFC2822 format (used in emails)
+	 * @param x
+	 *            The date in RFC2822 format (used in emails)
 	 * @return A new StarDate object
 	 * @throws ParseException
 	 */
@@ -151,15 +152,16 @@ public class StarDate {
 		return StarDate.getStarDate(new SimpleDateFormat(
 				"EEE, dd MMM yyyy HH:mm:ss Z").parse(x));
 	}
-	
+
 	/**
-	 * @param x The date in the format git uses
+	 * @param x
+	 *            The date in the format git uses
 	 * @return A new StarDate object
 	 * @throws ParseException
 	 */
 	public static StarDate parseGitDate(String x) throws ParseException {
 		return StarDate.getStarDate(new SimpleDateFormat(
-		"EEE MMM dd HH:mm:ss yyyy Z").parse(x));
+				"EEE MMM dd HH:mm:ss yyyy Z").parse(x));
 	}
 
 	// ------------------------------------------------------------------------------------------------
@@ -231,10 +233,12 @@ public class StarDate {
 	private static long getStartOfYear(int y) {
 		if ((y >= 0) && (y <= MAX_YEAR_CACHED)) {
 			if (START_OF_YEAR[y] != 0) {
-//				log.info("cache hit for year " + y + ": " + START_OF_YEAR[y]);
+				// log.info("cache hit for year " + y + ": " +
+				// START_OF_YEAR[y]);
 				return START_OF_YEAR[y];
 			} else if (y == 1970) {
-				// Special hack. Auto-initialized cache (zero) is by coincidence correct for 1970.
+				// Special hack. Auto-initialized cache (zero) is by coincidence
+				// correct for 1970.
 				return 0;
 			} else {
 				Calendar cal = getDefaultCalendar();
@@ -305,15 +309,17 @@ public class StarDate {
 		}
 		if ((sz > 1) && args[0].equals("--rfc2822")) {
 			if (sz == 2) {
-				SimpleDateFormat format = new SimpleDateFormat(
-						"EEE, dd MMM yyyy HH:mm:ss Z");
-				try {
-					System.out.println(StarDate.getStarDate(format
-							.parse(args[1])));
-				} catch (ParseException e) {
-					log.error(e);
-					e.printStackTrace();
-				}
+				System.out.println(StarDate.parseRFC2822(args[1]));
+				System.exit(0);
+			} else {
+				log.error("Unknown usage.");
+				System.exit(1);
+			}
+		}
+		
+		if ((sz > 1) && args[0].equals("--git")) {
+			if (sz == 2) {
+				System.out.println(StarDate.parseGitDate(args[1]));
 				System.exit(0);
 			} else {
 				log.error("Unknown usage.");
