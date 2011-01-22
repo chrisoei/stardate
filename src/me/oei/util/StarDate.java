@@ -124,7 +124,7 @@ public final class StarDate implements Comparable<StarDate> {
 	/**
 	 * Create a StarDate object using the current date/time.
 	 */
-	public static StarDate getCurrentStarDate() {
+	public static StarDate newInstance() {
 		return newInstance(new Date());
 	}
 
