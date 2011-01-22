@@ -18,16 +18,17 @@ import org.apache.log4j.*;
 
 // Note that all unit tests have been moved to a separate project (TestStarDate) so that the StarDate
 // jar files are as lean as possible.
-public class StarDate {
-	protected static final TimeZone UTC = TimeZone.getTimeZone("UTC");
-	protected static final Locale LOCALE = Locale.ENGLISH;
-	public static final String StandardDateFormat = "%1$tA, %1$tB %1$td, %1$tY %1$tI:%1$tM:%1$tS %1$Tp %1$tZ";
+public final class StarDate implements Comparable<StarDate> {
 	public static final double SECOND = 3.1688765e-08;
 	public static final double MINUTE = 1.9013259e-06;
 	public static final double HOUR = 0.00011407955;
 	public static final double DAY = 0.0027379093;
-	public static final String VERSION = "3.0.0";
-	public static final String helpURL = "http://jarvis/notes/StarDateHelp";
+	
+	private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+	private static final Locale LOCALE = Locale.ENGLISH;
+	private static final String StandardDateFormat = "%1$tA, %1$tB %1$td, %1$tY %1$tI:%1$tM:%1$tS %1$Tp %1$tZ";
+
+	private static final String helpURL = "http://jarvis/notes/StarDateHelp";
 	private static final int MAX_YEAR_CACHED = 2100;
 	private static long START_OF_YEAR[] = new long[MAX_YEAR_CACHED + 1];
 	static { // Pre-fill cache with most commonly queried years.
@@ -35,28 +36,29 @@ public class StarDate {
 		START_OF_YEAR[2012] = 1325376000000L;
 	}
 
-	static Logger log = Logger.getLogger(StarDate.class);
+	private static Logger log = Logger.getLogger(StarDate.class);
 
 	/**
 	 * The double-precision floating point representation.
 	 */
-	private double y;
+	private final double y;
 
 	// Factory Methods
 	// --------------------------------------------------------------------------------------
+	// See Effective Java: 41.8/731
 	/**
 	 * Create a StarDate object using the time in milliseconds past the epoch.
 	 * 
 	 * @param timeInMillis
 	 * 
 	 */
-	public static StarDate getStarDate(long timeInMillis) {
+	public static StarDate newInstance(long timeInMillis) {
 		Calendar calutc = getDefaultCalendar();
 		calutc.setTimeInMillis(timeInMillis);
 		int year = calutc.get(Calendar.YEAR);
 		double y0 = getStartOfYear(year);
 		double y1 = getStartOfYear(year + 1);
-		return getStarDate(year + (double) (timeInMillis - y0) / (y1 - y0));
+		return newInstance(year + (double) (timeInMillis - y0) / (y1 - y0));
 	}
 
 	/**
@@ -65,16 +67,16 @@ public class StarDate {
 	 * @param cal
 	 *            the input calendar object (any time zone)
 	 */
-	public static StarDate getStarDate(Calendar cal) {
+	public static StarDate newInstance(Calendar cal) {
 		if (cal.getTimeZone() == UTC) {
 			// Special case. No need to convert to UTC, so go for speed.
 			int year = cal.get(Calendar.YEAR);
 			double y0 = getStartOfYear(year);
 			double y1 = getStartOfYear(year + 1);
-			return getStarDate(year + (double) (cal.getTimeInMillis() - y0)
+			return newInstance(year + (double) (cal.getTimeInMillis() - y0)
 					/ (y1 - y0));
 		}
-		return getStarDate(cal.getTimeInMillis());
+		return newInstance(cal.getTimeInMillis());
 	}
 
 	/**
@@ -84,12 +86,9 @@ public class StarDate {
 	 * @param x
 	 *            the input double-precision float
 	 */
-	public static StarDate getStarDate(double x) {
-		StarDate sd = new StarDate();
-		sd.y = x;
-		if (x < 1) {
-			log.warn("StarDates < 1.0 have not been unit tested.");
-		}
+	public static StarDate newInstance(double x) {
+		StarDate sd = new StarDate(x);
+
 		return sd;
 	}
 
@@ -99,8 +98,8 @@ public class StarDate {
 	 * @param x
 	 *            the StarDate object to copy
 	 */
-	public static StarDate getStarDate(StarDate sd) {
-		return getStarDate(sd.y);
+	public static StarDate newInstance(StarDate sd) {
+		return newInstance(sd.y);
 	}
 
 	/*
@@ -109,7 +108,7 @@ public class StarDate {
 	 * @param x the String representation
 	 */
 	public static StarDate parseStarDate(String x) {
-		return getStarDate(Double.parseDouble(x));
+		return newInstance(Double.parseDouble(x));
 	}
 
 	/**
@@ -118,20 +117,20 @@ public class StarDate {
 	 * @param d
 	 *            the input Date object
 	 */
-	public static StarDate getStarDate(Date d) {
+	public static StarDate newInstance(Date d) {
 		Calendar cal = getDefaultCalendar();
 		cal.setTime(d);
-		return getStarDate(cal);
+		return newInstance(cal);
 	}
 
 	/**
 	 * Create a StarDate object using the current date/time.
 	 */
 	public static StarDate getCurrentStarDate() {
-		return getStarDate(new Date());
+		return newInstance(new Date());
 	}
 
-	public static StarDate getStarDate(TimeZone tz, int year, int month,
+	public static StarDate newInstance(TimeZone tz, int year, int month,
 			int day, int hour, int minute, int second) {
 		Calendar cal = new GregorianCalendar(tz, LOCALE);
 		cal.set(Calendar.YEAR, year);
@@ -141,7 +140,7 @@ public class StarDate {
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
 		cal.set(Calendar.SECOND, second);
-		return getStarDate(cal);
+		return newInstance(cal);
 	}
 
 	/**
@@ -151,7 +150,7 @@ public class StarDate {
 	 * @throws ParseException
 	 */
 	public static StarDate parseRFC2822(String x) throws ParseException {
-		return StarDate.getStarDate(new SimpleDateFormat(
+		return StarDate.newInstance(new SimpleDateFormat(
 				"EEE, dd MMM yyyy HH:mm:ss Z").parse(x));
 	}
 
@@ -162,15 +161,24 @@ public class StarDate {
 	 * @throws ParseException
 	 */
 	public static StarDate parseGitDate(String x) throws ParseException {
-		return StarDate.getStarDate(new SimpleDateFormat(
+		return StarDate.newInstance(new SimpleDateFormat(
 				"EEE MMM dd HH:mm:ss yyyy Z").parse(x));
 	}
 
 	// ------------------------------------------------------------------------------------------------
 
 	// Clients should use the factory methods instead of the constructor.
-	protected StarDate() {
-
+	// A private contructor and the lack of mutators makes this class immutable.
+	private StarDate() {
+		y = 0;
+		throw new AssertionError();
+	}
+	
+	private StarDate(double x) {
+		y = x;
+		if (x < 1) {
+			log.warn("StarDates < 1.0 have not been unit tested.");
+		}
 	}
 
 	// Getters
@@ -226,10 +234,6 @@ public class StarDate {
 		return Integer.toString((int) y);
 	}
 
-	public String toString() {
-		return String.format("%04.13f", y);
-	}
-
 	// Utilities
 	// ------------------------------------------------------------------------------------------------
 	private static long getStartOfYear(int y) {
@@ -267,12 +271,56 @@ public class StarDate {
 		return cal.getTimeInMillis();
 	}
 
-	protected static Calendar getDefaultCalendar() {
+	private static Calendar getDefaultCalendar() {
 		Calendar cal = new GregorianCalendar(UTC, LOCALE);
-		cal.clear();
+//		cal.clear();
 		return cal;
 	}
 
+	// Object overrides
+	// ----------------------------------------------------------------------------------------------
+
+	@Override public boolean equals(Object o) {
+		// See Effective Java: 92.9/731
+		if (o instanceof StarDate) { // instanceof catches null case
+			return y == ((StarDate)o).y;
+		}
+		return false;
+	}
+	
+	@Override public int hashCode() {
+		// See Effective Java: 121.2/731
+		long l = Double.doubleToLongBits(y);
+		return (int) (l ^ (l >>> 32));
+	}
+	
+	/**
+	 * Returns the string representation of this StarDate.
+	 * The string consists of a 4-digit year, followed by a period, 
+	 * followed by exactly 13 digits (padded in back with zeros 
+	 * if necessary.) 
+	 **/
+	@Override public String toString() {
+		return String.format("%04.13f", y);
+	}
+	
+//	@Override public StarDate clone() {
+//		// See Effective Java: 135.3/731
+//		try {
+//			return (StarDate) super.clone();
+//		} catch(CloneNotSupportedException e) {
+//			throw new AssertionError(); //Can't happen
+//		}
+//	}
+	
+
+	@Override
+	public int compareTo(StarDate x) {
+		return Double.valueOf(y).compareTo(x.y);
+	}
+	
+	// Main
+	// ----------------------------------------------------------------------------------------------
 	/**
 	 * java com.nestria.sim.StarDate "America/Los_Angeles" 2010 2 27 8 33
 	 * computes the StarDate for 2/27/2010 08:33 AM PST.
@@ -289,7 +337,7 @@ public class StarDate {
 		// If only 1 arg, assume it is a StarDate to be converted to Date/Time
 		if (sz == 1) {
 			if (args[0].equals("--version")) {
-				System.out.println(VERSION);
+				System.out.println("3.1.0");
 			} else if (args[0].equals("--help")) {
 				java.awt.Desktop.getDesktop().browse(
 						java.net.URI.create(helpURL));
@@ -301,7 +349,7 @@ public class StarDate {
 
 		if ((sz > 1) && args[0].equals("--file")) {
 			if (sz == 2) {
-				System.out.println(StarDate.getStarDate(new Date((new File(
+				System.out.println(StarDate.newInstance(new Date((new File(
 						args[1])).lastModified())));
 				System.exit(0);
 			} else {
@@ -354,6 +402,6 @@ public class StarDate {
 			cal.set(Calendar.SECOND, Integer.valueOf(args[6]));
 		}
 		log.info(new Date(cal.getTimeInMillis()));
-		System.out.println(StarDate.getStarDate(cal));
+		System.out.println(StarDate.newInstance(cal));
 	}
 }
