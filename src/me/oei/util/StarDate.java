@@ -26,9 +26,7 @@ public final class StarDate implements Comparable<StarDate> {
 	
 	private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 	private static final Locale LOCALE = Locale.ENGLISH;
-	private static final String StandardDateFormat = "%1$tA, %1$tB %1$td, %1$tY %1$tI:%1$tM:%1$tS %1$Tp %1$tZ";
 
-	private static final String helpURL = "http://jarvis/notes/StarDateHelp";
 	private static final int MAX_YEAR_CACHED = 2100;
 	private static long START_OF_YEAR[] = new long[MAX_YEAR_CACHED + 1];
 	static { // Pre-fill cache with most commonly queried years.
@@ -142,11 +140,21 @@ public final class StarDate implements Comparable<StarDate> {
 		cal.set(Calendar.SECOND, second);
 		return newInstance(cal);
 	}
+	
+	/**
+	 * Creates a new StarDate object from the last modification
+	 * time of File x.
+	 * @param x	the File object to examine.
+	 * @return	a new StarDate object
+	 */
+	public static StarDate newInstance(File x) {
+		return StarDate.newInstance(new Date(x.lastModified()));
+	}
 
 	/**
 	 * @param x
-	 *            The date in RFC2822 format (used in emails)
-	 * @return A new StarDate object
+	 *            the date in RFC2822 format (used in emails)
+	 * @return a new StarDate object
 	 * @throws ParseException
 	 */
 	public static StarDate parseRFC2822(String x) throws ParseException {
@@ -164,6 +172,7 @@ public final class StarDate implements Comparable<StarDate> {
 		return StarDate.newInstance(new SimpleDateFormat(
 				"EEE MMM dd HH:mm:ss yyyy Z").parse(x));
 	}
+
 
 	// ------------------------------------------------------------------------------------------------
 
@@ -317,91 +326,5 @@ public final class StarDate implements Comparable<StarDate> {
 	@Override
 	public int compareTo(StarDate x) {
 		return Double.valueOf(y).compareTo(x.y);
-	}
-	
-	// Main
-	// ----------------------------------------------------------------------------------------------
-	/**
-	 * java com.nestria.sim.StarDate "America/Los_Angeles" 2010 2 27 8 33
-	 * computes the StarDate for 2/27/2010 08:33 AM PST.
-	 * 
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
-		int sz = args.length;
-		// If no args, then return current StarDate.
-		if (sz == 0) {
-			System.out.println(StarDate.getCurrentStarDate());
-			System.exit(0);
-		}
-		// If only 1 arg, assume it is a StarDate to be converted to Date/Time
-		if (sz == 1) {
-			if (args[0].equals("--version")) {
-				System.out.println("3.1.0");
-			} else if (args[0].equals("--help")) {
-				java.awt.Desktop.getDesktop().browse(
-						java.net.URI.create(helpURL));
-			} else {
-				System.out.println(StarDate.parseStarDate(args[0]).getDate());
-			}
-			System.exit(0);
-		}
-
-		if ((sz > 1) && args[0].equals("--file")) {
-			if (sz == 2) {
-				System.out.println(StarDate.newInstance(new Date((new File(
-						args[1])).lastModified())));
-				System.exit(0);
-			} else {
-				log.error("Unknown usage.");
-				System.exit(1);
-			}
-		}
-		if ((sz > 1) && args[0].equals("--rfc2822")) {
-			if (sz == 2) {
-				System.out.println(StarDate.parseRFC2822(args[1]));
-				System.exit(0);
-			} else {
-				log.error("Unknown usage.");
-				System.exit(1);
-			}
-		}
-		
-		if ((sz > 1) && args[0].equals("--git")) {
-			if (sz == 2) {
-				System.out.println(StarDate.parseGitDate(args[1]));
-				System.exit(0);
-			} else {
-				log.error("Unknown usage.");
-				System.exit(1);
-			}
-		}
-
-		TimeZone tz = TimeZone.getTimeZone(args[0]);
-		// Unknown time zone returns "GMT".
-		if ((!args[0].equals("GMT")) && (tz.getID().equals("GMT"))) {
-			log.error("Unknown time zone: " + args[0]);
-			System.exit(1);
-		}
-		Calendar cal = new GregorianCalendar(tz, LOCALE);
-		cal.clear();
-		cal.set(Calendar.YEAR, Integer.valueOf(args[1]));
-		// Don't forget month starts with 0
-		cal.set(Calendar.MONTH, Integer.valueOf(args[2]) - 1);
-		cal.set(Calendar.DAY_OF_MONTH, Integer.valueOf(args[3]));
-		if (sz >= 5) {
-			cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(args[4]));
-		} else {
-			// if hour is not specified, assume mid-day in that time zone
-			cal.set(Calendar.HOUR_OF_DAY, 12);
-		}
-		if (sz >= 6) {
-			cal.set(Calendar.MINUTE, Integer.valueOf(args[5]));
-		}
-		if (sz >= 7) {
-			cal.set(Calendar.SECOND, Integer.valueOf(args[6]));
-		}
-		log.info(new Date(cal.getTimeInMillis()));
-		System.out.println(StarDate.newInstance(cal));
 	}
 }
