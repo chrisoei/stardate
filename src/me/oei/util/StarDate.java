@@ -30,6 +30,8 @@ public final class StarDate implements Comparable<StarDate> {
 	private static final int MAX_YEAR_CACHED = 2100;
 	private static long START_OF_YEAR[] = new long[MAX_YEAR_CACHED + 1];
 	static { // Pre-fill cache with most commonly queried years.
+		START_OF_YEAR[2009] = 1230768000000L;
+		START_OF_YEAR[2010] = 1262304000000L;
 		START_OF_YEAR[2011] = 1293840000000L;
 		START_OF_YEAR[2012] = 1325376000000L;
 	}
@@ -248,8 +250,7 @@ public final class StarDate implements Comparable<StarDate> {
 	private static long getStartOfYear(int y) {
 		if ((y >= 0) && (y <= MAX_YEAR_CACHED)) {
 			if (START_OF_YEAR[y] != 0) {
-				// log.info("cache hit for year " + y + ": " +
-				// START_OF_YEAR[y]);
+//				log.info("cache hit for year " + y + ": " + START_OF_YEAR[y]);
 				return START_OF_YEAR[y];
 			} else if (y == 1970) {
 				// Special hack. Auto-initialized cache (zero) is by coincidence
