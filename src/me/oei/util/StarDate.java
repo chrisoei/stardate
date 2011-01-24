@@ -18,10 +18,26 @@ import org.apache.log4j.*;
 
 // Note that all unit tests have been moved to a separate project (TestStarDate) so that the StarDate
 // jar files are as lean as possible.
+/**
+ * @author Chris Oei
+ *
+ */
 public final class StarDate implements Comparable<StarDate> {
+	/**
+	 * One second, measured in units of StarDate.
+	 */
 	public static final double SECOND = 3.1688765e-08;
+	/**
+	 * One minute, measured in units of StarDate.
+	 */
 	public static final double MINUTE = 1.9013259e-06;
+	/**
+	 * One hour, measured in units of StarDate.
+	 */
 	public static final double HOUR = 0.00011407955;
+	/**
+	 * One day, measured in units of StarDate.
+	 */
 	public static final double DAY = 0.0027379093;
 	
 	private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
@@ -49,7 +65,8 @@ public final class StarDate implements Comparable<StarDate> {
 	/**
 	 * Create a StarDate object using the time in milliseconds past the epoch.
 	 * 
-	 * @param timeInMillis
+	 * @param timeInMillis the time in milliseconds past the epoch
+	 * @return a new StarDate object
 	 * 
 	 */
 	public static StarDate newInstance(long timeInMillis) {
@@ -58,7 +75,7 @@ public final class StarDate implements Comparable<StarDate> {
 		int year = calutc.get(Calendar.YEAR);
 		double y0 = getStartOfYear(year);
 		double y1 = getStartOfYear(year + 1);
-		return newInstance(year + (double) (timeInMillis - y0) / (y1 - y0));
+		return newInstance(year + (timeInMillis - y0) / (y1 - y0));
 	}
 
 	/**
@@ -66,6 +83,7 @@ public final class StarDate implements Comparable<StarDate> {
 	 * 
 	 * @param cal
 	 *            the input calendar object (any time zone)
+	 * @return a new StarDate object
 	 */
 	public static StarDate newInstance(Calendar cal) {
 		if (cal.getTimeZone() == UTC) {
@@ -73,7 +91,7 @@ public final class StarDate implements Comparable<StarDate> {
 			int year = cal.get(Calendar.YEAR);
 			double y0 = getStartOfYear(year);
 			double y1 = getStartOfYear(year + 1);
-			return newInstance(year + (double) (cal.getTimeInMillis() - y0)
+			return newInstance(year + (cal.getTimeInMillis() - y0)
 					/ (y1 - y0));
 		}
 		return newInstance(cal.getTimeInMillis());
@@ -85,6 +103,7 @@ public final class StarDate implements Comparable<StarDate> {
 	 * 
 	 * @param x
 	 *            the input double-precision float
+	 * @return a new StarDate object
 	 */
 	public static StarDate newInstance(double x) {
 		StarDate sd = new StarDate(x);
@@ -93,19 +112,18 @@ public final class StarDate implements Comparable<StarDate> {
 	}
 
 	/**
-	 * The StarDate copy constructor.
-	 * 
-	 * @param x
-	 *            the StarDate object to copy
+	 * The StarDate copy factory method.
+	 * @param sd the StarDate object to copy
+	 * @return a new StarDate object
 	 */
 	public static StarDate newInstance(StarDate sd) {
 		return newInstance(sd.y);
 	}
 
-	/*
+	/**
 	 * Create a StarDate object using a string representation of the StarDate.
-	 * 
-	 * @param x the String representation
+	 * @param x the string representation of a StarDate (example: "2010.12345")
+	 * @return a new StarDate object
 	 */
 	public static StarDate parseStarDate(String x) {
 		return newInstance(Double.parseDouble(x));
@@ -116,6 +134,7 @@ public final class StarDate implements Comparable<StarDate> {
 	 * 
 	 * @param d
 	 *            the input Date object
+	 * @return a new StarDate object
 	 */
 	public static StarDate newInstance(Date d) {
 		Calendar cal = getDefaultCalendar();
@@ -125,11 +144,22 @@ public final class StarDate implements Comparable<StarDate> {
 
 	/**
 	 * Create a StarDate object using the current date/time.
+	 * @return a new StarDate object
 	 */
 	public static StarDate newInstance() {
 		return newInstance(new Date());
 	}
 
+	/**
+	 * @param tz	a TimeZone object
+	 * @param year	the (integer) year
+	 * @param month the month (January = 1, ..., December = 12)
+	 * @param day	the day (1 to 31 inclusive)
+	 * @param hour	the hour (0 to 23 inclusive)
+	 * @param minute the minute (0 to 59 inclusive)
+	 * @param second the second (0 to 59 inclusive)
+	 * @return a new StarDate object
+	 */
 	public static StarDate newInstance(TimeZone tz, int year, int month,
 			int day, int hour, int minute, int second) {
 		Calendar cal = new GregorianCalendar(tz, LOCALE);
@@ -157,7 +187,7 @@ public final class StarDate implements Comparable<StarDate> {
 	 * @param x
 	 *            the date in RFC2822 format (used in emails)
 	 * @return a new StarDate object
-	 * @throws ParseException
+	 * @throws ParseException if date cannot be parsed
 	 */
 	public static StarDate parseRFC2822(String x) throws ParseException {
 		return StarDate.newInstance(new SimpleDateFormat(
@@ -168,7 +198,7 @@ public final class StarDate implements Comparable<StarDate> {
 	 * @param x
 	 *            The date in the format git uses
 	 * @return A new StarDate object
-	 * @throws ParseException
+	 * @throws ParseException if date cannot be parsed
 	 */
 	public static StarDate parseGitDate(String x) throws ParseException {
 		return StarDate.newInstance(new SimpleDateFormat(
@@ -179,7 +209,7 @@ public final class StarDate implements Comparable<StarDate> {
 	// ------------------------------------------------------------------------------------------------
 
 	// Clients should use the factory methods instead of the constructor.
-	// A private contructor and the lack of mutators makes this class immutable.
+	// A private constructor and the lack of mutators makes this class immutable.
 	private StarDate() {
 		y = 0;
 		throw new AssertionError();
@@ -195,10 +225,17 @@ public final class StarDate implements Comparable<StarDate> {
 	// Getters
 	// ----------------------------------------------------------------------------------------------
 
+	/**
+	 * @return the double representation of the StarDate
+	 */
+
 	public double getDouble() {
 		return y;
 	}
 
+	/**
+	 * @return the milliseconds past the epoch that represents the StarDate
+	 */
 	public long getTimeInMillis() {
 		int y0 = (int) y;
 		long t0 = getStartOfYear(y0);
@@ -212,7 +249,7 @@ public final class StarDate implements Comparable<StarDate> {
 	 * @return A string representation of the floating-point StarDate.
 	 */
 	public String getApproximate() {
-		return String.format("%.3f", y);
+		return String.format("%.3f", Double.valueOf(y));
 	}
 
 	// public String getStandardDateString(String timezoneString) {
@@ -241,6 +278,9 @@ public final class StarDate implements Comparable<StarDate> {
 		return new Date(getTimeInMillis());
 	}
 
+	/**
+	 * @return the "year" part of the StarDate, represented as a String
+	 */
 	public String getYearString() {
 		return Integer.toString((int) y);
 	}
@@ -311,7 +351,7 @@ public final class StarDate implements Comparable<StarDate> {
 	 * if necessary.) 
 	 **/
 	@Override public String toString() {
-		return String.format("%04.13f", y);
+		return String.format("%.13f", Double.valueOf(y));
 	}
 	
 //	@Override public StarDate clone() {
@@ -326,6 +366,6 @@ public final class StarDate implements Comparable<StarDate> {
 
 	@Override
 	public int compareTo(StarDate x) {
-		return Double.valueOf(y).compareTo(x.y);
+		return Double.valueOf(y).compareTo(Double.valueOf(x.y));
 	}
 }
