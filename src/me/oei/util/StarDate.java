@@ -47,17 +47,17 @@ public final class StarDate implements Comparable<StarDate> {
 	private static final Locale LOCALE = Locale.ENGLISH;
 
 	private static final int MAX_YEAR_CACHED = 2100;
-	
+
 	@GuardedBy("itself")
 	private static long START_OF_YEAR[];
 	static { // Pre-fill cache with most commonly queried years.
-		synchronized (START_OF_YEAR) {
-			START_OF_YEAR = new long[MAX_YEAR_CACHED + 1];
-			START_OF_YEAR[2009] = 1230768000000L;
-			START_OF_YEAR[2010] = 1262304000000L;
-			START_OF_YEAR[2011] = 1293840000000L;
-			START_OF_YEAR[2012] = 1325376000000L;
-		}
+	// No need to synchronize within static initializer, according to the
+	// Java Language Specifications.
+		START_OF_YEAR = new long[MAX_YEAR_CACHED + 1];
+		START_OF_YEAR[2009] = 1230768000000L;
+		START_OF_YEAR[2010] = 1262304000000L;
+		START_OF_YEAR[2011] = 1293840000000L;
+		START_OF_YEAR[2012] = 1325376000000L;
 	}
 
 	private static Logger log = Logger.getLogger(StarDate.class);
@@ -312,8 +312,8 @@ public final class StarDate implements Comparable<StarDate> {
 	// Utilities
 	// ------------------------------------------------------------------------------------------------
 	private static long getStartOfYear(int y) {
-		synchronized (START_OF_YEAR) {
-			if ((y >= 0) && (y <= MAX_YEAR_CACHED)) {
+		if ((y >= 0) && (y <= MAX_YEAR_CACHED)) {
+			synchronized (START_OF_YEAR) {
 				if (START_OF_YEAR[y] != 0) {
 					// log.info("cache hit for year " + y + ": " +
 					// START_OF_YEAR[y]);
