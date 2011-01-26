@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.Locale;
-
 import net.jcip.annotations.*;
 
 import org.apache.log4j.*;
@@ -24,7 +23,7 @@ import org.apache.log4j.*;
  * @author Chris Oei
  * 
  */
-@ThreadSafe
+@Immutable
 public final class StarDate implements Comparable<StarDate> {
 	/**
 	 * One second, measured in units of StarDate.
@@ -46,21 +45,7 @@ public final class StarDate implements Comparable<StarDate> {
 	private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 	private static final Locale LOCALE = Locale.ENGLISH;
 
-	private static final int MAX_YEAR_CACHED = 2100;
-
-	@GuardedBy("itself")
-	private static long START_OF_YEAR[];
-	static { // Pre-fill cache with most commonly queried years.
-	// No need to synchronize within static initializer, according to the
-	// Java Language Specifications.
-		START_OF_YEAR = new long[MAX_YEAR_CACHED + 1];
-		START_OF_YEAR[2009] = 1230768000000L;
-		START_OF_YEAR[2010] = 1262304000000L;
-		START_OF_YEAR[2011] = 1293840000000L;
-		START_OF_YEAR[2012] = 1325376000000L;
-	}
-
-	private static Logger log = Logger.getLogger(StarDate.class);
+	private static final Logger log = Logger.getLogger(StarDate.class);
 
 	/**
 	 * The double-precision floating point representation.
@@ -82,8 +67,8 @@ public final class StarDate implements Comparable<StarDate> {
 		Calendar calutc = getDefaultCalendar();
 		calutc.setTimeInMillis(timeInMillis);
 		int year = calutc.get(Calendar.YEAR);
-		double y0 = getStartOfYear(year);
-		double y1 = getStartOfYear(year + 1);
+		double y0 = StartOfYear.getStartOfYear(year);
+		double y1 = StartOfYear.getStartOfYear(year + 1);
 		return newInstance(year + (timeInMillis - y0) / (y1 - y0));
 	}
 
@@ -98,8 +83,8 @@ public final class StarDate implements Comparable<StarDate> {
 		if (cal.getTimeZone() == UTC) {
 			// Special case. No need to convert to UTC, so go for speed.
 			int year = cal.get(Calendar.YEAR);
-			double y0 = getStartOfYear(year);
-			double y1 = getStartOfYear(year + 1);
+			double y0 = StartOfYear.getStartOfYear(year);
+			double y1 = StartOfYear.getStartOfYear(year + 1);
 			return newInstance(year + (cal.getTimeInMillis() - y0) / (y1 - y0));
 		}
 		return newInstance(cal.getTimeInMillis());
@@ -262,8 +247,8 @@ public final class StarDate implements Comparable<StarDate> {
 	 */
 	public long getTimeInMillis() {
 		int y0 = (int) y;
-		long t0 = getStartOfYear(y0);
-		long t1 = getStartOfYear(y0 + 1);
+		long t0 = StartOfYear.getStartOfYear(y0);
+		long t1 = StartOfYear.getStartOfYear(y0 + 1);
 		return (long) (t0 + (t1 - t0) * (y - y0));
 	}
 
@@ -311,44 +296,7 @@ public final class StarDate implements Comparable<StarDate> {
 
 	// Utilities
 	// ------------------------------------------------------------------------------------------------
-	private static long getStartOfYear(int y) {
-		if ((y >= 0) && (y <= MAX_YEAR_CACHED)) {
-			synchronized (START_OF_YEAR) {
-				if (START_OF_YEAR[y] != 0) {
-					// log.info("cache hit for year " + y + ": " +
-					// START_OF_YEAR[y]);
-					return START_OF_YEAR[y];
-				} else if (y == 1970) {
-					// Special hack. Auto-initialized cache (zero) is by
-					// coincidence
-					// correct for 1970.
-					return 0;
-				} else {
-					Calendar cal = getDefaultCalendar();
-					cal.set(Calendar.YEAR, y);
-					cal.set(Calendar.MONTH, Calendar.JANUARY);
-					cal.set(Calendar.DAY_OF_MONTH, 1);
-					cal.set(Calendar.HOUR_OF_DAY, 0);
-					cal.set(Calendar.MINUTE, 0);
-					cal.set(Calendar.SECOND, 0);
-					cal.set(Calendar.MILLISECOND, 0);
-					START_OF_YEAR[y] = cal.getTimeInMillis();
-					// log.info("cache store for year " + y + ": " +
-					// START_OF_YEAR[y]);
-					return START_OF_YEAR[y];
-				}
-			}
-		}
-		Calendar cal = getDefaultCalendar();
-		cal.set(Calendar.YEAR, y);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		return cal.getTimeInMillis();
-	}
+
 
 	private static Calendar getDefaultCalendar() {
 		Calendar cal = new GregorianCalendar(UTC, LOCALE);
