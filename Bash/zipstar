@@ -1,0 +1,7 @@
+#!/bin/bash
+
+d="$1"
+sd=`java com.nestria.sim.StarDate`
+
+zip -r "$d-$sd.zip" "$d"
+

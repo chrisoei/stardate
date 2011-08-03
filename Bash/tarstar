@@ -1,0 +1,12 @@
+#!/bin/bash
+
+d=$1
+sd=`java com.nestria.sim.StarDate`
+
+if [ -d "$d" ]
+then
+	tar zcvf $d-$sd.tgz $d
+else
+	gzip $d-$sd.gz $d
+fi
+
