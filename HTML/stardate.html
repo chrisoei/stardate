@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script type="text/javascript" src="lib/stardate/StarDate.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-1.6.1.js"></script>
+<script type="text/javascript">
+
+updatestardate = function() {
+  var year = $('input#year').val();
+  var month = $('input#month').val();
+  var day = $('input#day').val();
+  var hour = $('input#hour').val();
+  var minute = $('input#minute').val();
+  var second = $('input#second').val();
+  var millisecond = 0;
+  var d = new Date(year, month - 1, day, hour, minute, second, millisecond);
+  $('input#stardate').val(StarDate(d).toFixed(15));
+};
+
+updatedate = function() {
+    var n = StarDate(parseFloat($('input#stardate').val()));
+    $('input#year').val(n.getFullYear());
+    $('input#month').val(n.getMonth() + 1);
+    $('input#day').val(n.getDate());
+    $('input#hour').val(n.getHours());
+    $('input#minute').val(n.getMinutes());
+    $('input#second').val(n.getSeconds());
+}
+
+$(document).ready(function() {
+    var n = new Date();
+    $('input#year').val(n.getFullYear());
+    $('input#month').val(n.getMonth() + 1);
+    $('input#day').val(n.getDate());
+    $('input#hour').val(n.getHours());
+    $('input#minute').val(n.getMinutes());
+    $('input#second').val(n.getSeconds());
+    updatestardate();
+    $('input#year').change(function() { updatestardate(); } );
+    $('input#month').change(function() { updatestardate(); } );
+    $('input#day').change(function() { updatestardate(); } );
+    $('input#hour').change(function() { updatestardate(); } );
+    $('input#minute').change(function() { updatestardate(); } );
+    $('input#second').change(function() { updatestardate(); } );
+    $('input#stardate').change(function() { updatedate(); } );
+
+});
+</script>
+
+<style type="text/css">
+<!--
+.mybox {
+font-family: verdana;
+border: #A0A0A0 1px solid;
+font-size: 12px;
+color: #101010
+}
+-->
+</style>
+</head>
+<body>
+<form>
+<h1>Date/Time:</h1>
+  <input id="year" type="text" class="mybox" size=4 /> -
+  <input id="month" type="text" class="mybox" size=2 /> -
+  <input id="day" type="text" class="mybox" size=2 /> &nbsp;&nbsp;
+  <input id="hour" type="text" class="mybox" size=2 /> :
+  <input id="minute" type="text" class="mybox" size=2 /> :
+  <input id="second" type="text" class="mybox" size=2 />
+  <h1>StarDate:</h1>
+  <input id="stardate" type=text" class="mybox" size=21 />
+</form>
+</body>
+</html>
