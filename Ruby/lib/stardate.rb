@@ -44,6 +44,7 @@ class StarDate
     else
       [ base, '-', to_s, '.', ext ].join
     end
+  end
 
   def to_localdate
     to_time.to_date
