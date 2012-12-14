@@ -38,12 +38,12 @@ class StarDate
 
   def to_filename(filename)
     ext = File.extname filename
-    base = filename.chomp(ext)
-    if ext = ''
-      [ base, '-', to_s ].join('-')
-    else
-      [ base, '-', to_s, '.', ext ].join
-    end
+    [
+      filename.chomp(ext),
+      '-',
+      to_s,
+      ext
+    ].join
   end
 
   def to_localdate
