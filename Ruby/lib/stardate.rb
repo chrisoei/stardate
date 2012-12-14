@@ -36,6 +36,19 @@ class StarDate
     @stardate
   end
 
+  def to_filename(filename)
+    ext = File.extname filename
+    base = filename.chomp(ext)
+    if ext = ''
+      [ base, '-', to_s ].join('-')
+    else
+      [ base, '-', to_s, '.', ext ].join
+    end
+
+  def to_localdate
+    to_time.to_date
+  end
+
   def to_s
     sprintf("%.15f", @stardate)
   end
