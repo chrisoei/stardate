@@ -23,7 +23,15 @@ class StarDate
     t1 = Time.utc(y0 + 1).to_f
     @stardate = y0 + (datetime.to_f - t0)/(t1 - t0)
   end
-  
+
+  def to_datetime
+    to_time.to_datetime
+  end
+
+  def to_dts
+    to_time.utc.strftime("%Y%m%d_%H%M%SZ")
+  end
+
   def to_f
     @stardate
   end
@@ -39,20 +47,8 @@ class StarDate
     Time.at(t0 + (@stardate-y0)*(t1-t0))
   end
 
-  def to_localdate
-    to_time.to_date
-  end
-  
   def to_utcdate
     to_time.utc.to_date
-  end
-
-  def to_datetime
-    to_time.to_datetime
-  end
-
-  def to_dts
-    to_time.utc.strftime("%Y%m%d_%H%M%SZ")
   end
 
 end
