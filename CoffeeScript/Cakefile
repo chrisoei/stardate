@@ -1,0 +1,6 @@
+
+task 'test', 'run tests',
+  (options) ->
+    (require 'child_process').spawn 'jasmine-node',
+      [ '--coffee', '.'],
+      	stdio: 'inherit'
