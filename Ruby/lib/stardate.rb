@@ -4,6 +4,26 @@ class StarDate
 
   attr_accessor :stardate
 
+  class << self
+
+    def second
+      3.1688765e-08
+    end
+
+    def minute
+      1.9013259e-06
+    end
+
+    def hour
+      0.00011407955
+    end
+
+    def day
+      0.0027379093
+    end
+
+  end
+
   def initialize(t = Time.now)
     case t.class.to_s
     when "Float"

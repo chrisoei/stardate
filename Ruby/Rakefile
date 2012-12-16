@@ -2,7 +2,7 @@ require 'time'
 require 'erb'
 
 def my_version
-	'1.0.0'
+	'1.0.1'
 end
 
 task :default => :test
