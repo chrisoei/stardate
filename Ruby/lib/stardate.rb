@@ -6,20 +6,33 @@ class StarDate
 
   class << self
 
+    # Based on 365.25 days/year
     def second
-      3.1688765e-08
+      3.168808781402895e-08
     end
 
     def minute
-      1.9013259e-06
+      1.901285268841737e-06
     end
 
     def hour
-      0.00011407955
+      0.00011407711613050422
     end
 
     def day
-      0.0027379093
+      0.0027378507871321013
+    end
+
+    def week
+      0.019164955509924708
+    end
+
+    def fortnight
+      0.038329911019849415
+    end
+
+    def month
+      0.08333333333333333
     end
 
   end
