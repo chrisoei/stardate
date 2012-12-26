@@ -2,7 +2,7 @@ require 'time'
 require 'erb'
 
 def my_version
-	'1.0.1'
+  '1.0.2'
 end
 
 task :default => :test
@@ -14,8 +14,8 @@ end
 
 desc "Build the gem"
 task :build do
-	gemspec = ERB.new IO.read 'stardate.gemspec.erb'
-	IO.write 'stardate.gemspec', gemspec.result(binding)
+  gemspec = ERB.new IO.read 'stardate.gemspec.erb'
+  IO.write 'stardate.gemspec', gemspec.result(binding)
   sh %{ gem build stardate.gemspec }
 end
 

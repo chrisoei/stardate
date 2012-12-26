@@ -48,6 +48,8 @@ class StarDate
       datetime = t.utc
     when "ActiveSupport::TimeWithZone"
       datetime = t.utc
+    when "String"
+      datetime = Time.parse(t).utc
     else
       raise "Unknown conversion: #{t.class}"
     end
