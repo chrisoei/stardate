@@ -35,6 +35,18 @@ class StarDate
       0.08333333333333333
     end
 
+    def rename(filename, mode = :mtime)
+      case mode
+      when :mtime
+        datetime = File.mtime filename
+      when :ctime
+        datetime = File.ctime filename
+      else
+        raise "Unknown mode: #{mode}"
+      end
+      File.rename filename, datetime.to_stardate.to_filename(filename)
+    end
+
   end
 
   def initialize(t = Time.now)
