@@ -7,6 +7,11 @@ class StarDate
   class << self
 
     # Based on 365.25 days/year
+    
+    def millisecond
+      3.168808781402895e-11
+    end
+    
     def second
       3.168808781402895e-08
     end
