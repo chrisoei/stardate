@@ -6,38 +6,38 @@ class StarDate
 
   class << self
 
-    # Based on 365.25 days/year
+    # Based on 365.2425 days/Gregorian year
     
     def millisecond
-      3.168808781402895e-11
+      1.0/31556952000.0
     end
     
     def second
-      3.168808781402895e-08
+      1.0/31556952.0
     end
 
     def minute
-      1.901285268841737e-06
+      1.0/525949.2
     end
 
     def hour
-      0.00011407711613050422
+      1.0/8765.82
     end
 
     def day
-      0.0027378507871321013
+      1.0/365.2425
     end
 
     def week
-      0.019164955509924708
+      7.0/365.2425
     end
 
     def fortnight
-      0.038329911019849415
+      14.0/365.2425
     end
 
     def month
-      0.08333333333333333
+      1.0/12.0
     end
 
     def rename(filename, mode = :mtime)
