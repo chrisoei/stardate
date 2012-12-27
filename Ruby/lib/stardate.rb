@@ -107,6 +107,11 @@ class StarDate
     ].join
   end
 
+  # Round to the nearest second
+  def to_iso8601
+    Time.at(to_time.to_f + 0.5).iso8601
+  end
+
   def to_localdate
     to_time.to_date
   end
