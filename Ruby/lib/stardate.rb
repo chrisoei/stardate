@@ -1,5 +1,7 @@
 require 'time'
 
+require 'stardate_interval'
+
 class StarDate
 
   attr_accessor :stardate
@@ -7,11 +9,11 @@ class StarDate
   class << self
 
     # Based on 365.2425 days/Gregorian year
-    
+
     def millisecond
       1.0/31556952000.0
     end
-    
+
     def second
       1.0/31556952.0
     end
@@ -56,6 +58,12 @@ class StarDate
 
   def initialize(t = Time.now)
     case t.class.to_s
+    when "StarDate"
+      @stardate = t.stardate
+      return
+    when "Fixnum"
+      @stardate = t.to_f
+      return
     when "Float"
       @stardate = t
       return
@@ -74,6 +82,10 @@ class StarDate
     t0 = Time.utc(y0).to_f
     t1 = Time.utc(y0 + 1).to_f
     @stardate = y0 + (datetime.to_f - t0)/(t1 - t0)
+  end
+
+  def -(arg)
+    StarDateInterval.new arg, self
   end
 
   def inspect
