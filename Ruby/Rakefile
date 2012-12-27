@@ -28,3 +28,8 @@ desc "Install"
 task :install => [ :build, :uninstall ] do
   sh %{ gem install stardate-#{my_version}.gem --local }
 end
+
+desc "Upload to Gemfury"
+task :upload => [ ] do
+  sh %{ curl -F p1=@stardate-#{my_version}.gem https://gems.gemfury.com/vpkdgszjpyGr6bTg1fkz/ }
+end
