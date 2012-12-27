@@ -76,6 +76,15 @@ class StarDate
     @stardate = y0 + (datetime.to_f - t0)/(t1 - t0)
   end
 
+  def inspect
+    [
+      to_s,
+      ' [',
+      to_rfc2822,
+      ']'
+    ].join
+  end
+
   def to_datetime
     to_time.to_datetime
   end
@@ -100,6 +109,11 @@ class StarDate
 
   def to_localdate
     to_time.to_date
+  end
+
+  # Round to the nearest second
+  def to_rfc2822
+    Time.at(to_time.to_f + 0.5).rfc2822
   end
 
   def to_s
