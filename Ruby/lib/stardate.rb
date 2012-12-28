@@ -2,7 +2,7 @@ require 'time'
 
 require 'stardate_interval'
 
-class StarDate
+class Stardate
 
   attr_accessor :stardate
 
@@ -58,7 +58,7 @@ class StarDate
 
   def initialize(t = Time.now)
     case t.class.to_s
-    when "StarDate"
+    when "Stardate"
       @stardate = t.stardate
       return
     when "Fixnum"
@@ -85,7 +85,7 @@ class StarDate
   end
 
   def -(arg)
-    StarDateInterval.new arg, self
+    StardateInterval.new arg, self
   end
 
   def inspect
@@ -153,7 +153,7 @@ end
 class DateTime
 
   def to_stardate
-    StarDate.new self
+    Stardate.new self
   end
 
 end
@@ -161,7 +161,7 @@ end
 class Time
 
   def to_stardate
-    StarDate.new self
+    Stardate.new self
   end
 
 end

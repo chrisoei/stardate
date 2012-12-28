@@ -1,14 +1,14 @@
-class StarDateInterval
+class StardateInterval
 
   attr_accessor :start, :stop
 
   def initialize(start, stop)
-    @start = StarDate.new start
-    @stop = StarDate.new stop
+    @start = Stardate.new start
+    @stop = Stardate.new stop
   end
 
   def -@
-    StarDateInterval.new @stop, @start
+    StardateInterval.new @stop, @start
   end
 
   def years
@@ -16,31 +16,31 @@ class StarDateInterval
   end
 
   def months
-    years / StarDate.month
+    years / Stardate.month
   end
 
   def weeks
-    years / StarDate.week
+    years / Stardate.week
   end
 
   def days
-    years / StarDate.day
+    years / Stardate.day
   end
 
   def hours
-    years / StarDate.hour
+    years / Stardate.hour
   end
 
   def minutes
-    years / StarDate.minute
+    years / Stardate.minute
   end
 
   def seconds
-    years / StarDate.second
+    years / Stardate.second
   end
 
   def milliseconds
-    years / StarDate.millisecond
+    years / Stardate.millisecond
   end
 
   def inspect
