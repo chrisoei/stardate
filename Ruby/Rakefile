@@ -31,6 +31,5 @@ end
 
 desc "Upload to Rubygems"
 task :upload => [ ] do
-#  sh %{ curl -F p1=@stardate-#{my_version}.gem https://gems.gemfury.com/vpkdgszjpyGr6bTg1fkz/ }
   sh %{ gem push stardate-#{my_version}.gem }
 end
