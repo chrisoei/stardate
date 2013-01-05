@@ -42,6 +42,10 @@ class Stardate
       1.0/12.0
     end
 
+    def lifespan
+      80.0
+    end
+
     def rename(filename, mode = :mtime)
       case mode
       when :mtime

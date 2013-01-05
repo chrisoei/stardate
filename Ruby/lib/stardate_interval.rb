@@ -11,6 +11,10 @@ class StardateInterval
     StardateInterval.new @stop, @start
   end
 
+  def lifespans
+    years / Stardate.lifespan
+  end
+
   def years
     @stop.stardate - @start.stardate
   end
@@ -56,7 +60,7 @@ class StardateInterval
   end
 
   def to_human(precision = 3)
-    [ :years, :months, :weeks, :days, :hours, :minutes, :seconds, :milliseconds ].each do |scale|
+    [ :lifespans, :years, :months, :weeks, :days, :hours, :minutes, :seconds, :milliseconds ].each do |scale|
       x = public_send scale
       return "%.#{precision}f %s" % [x, scale] if x.abs >= 1
     end

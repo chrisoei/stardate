@@ -2,7 +2,7 @@ require 'time'
 require 'erb'
 
 def my_version
-  '2.1.1'
+  '2.1.2'
 end
 
 task :default => :test
@@ -21,7 +21,7 @@ end
 
 desc "Uninstall"
 task :uninstall do
-  sh %{ gem uninstall stardate --all }
+  sh %{ gem uninstall stardate --all --ignore-dependencies }
 end
 
 desc "Install"
