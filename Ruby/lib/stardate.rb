@@ -108,6 +108,10 @@ class Stardate
   def to_f
     @stardate
   end
+  
+  def to_femtoyears
+    (@stardate * 1e15).to_i
+  end
 
   def to_filename(filename)
     ext = File.extname filename
