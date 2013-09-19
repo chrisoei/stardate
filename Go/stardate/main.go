@@ -14,8 +14,14 @@ func printtln(t time.Time) {
 
 
 func main() {
+	var email = flag.Bool("email", false, "Use email date format")
 	flag.Parse()
-	f := "2006-01-02 15:04:05 -0700"
+        var f string;
+	if (*email) {
+		f = "Mon, 02 Jan 2006 15:04:05 -0700"
+	} else {
+		f = "2006-01-02 15:04:05 -0700"
+        }
 	args := flag.Args()
 	if len(args) > 0 {
 		for i := range args {
