@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/chrisoei/go-stardate"
 	"github.com/chrisoei/oei"
+	"os"
 	"time"
 )
 
@@ -15,6 +16,7 @@ func printtln(t time.Time) {
 func main() {
 	var email = flag.Bool("email", false, "Use email date format")
 	var git = flag.Bool("git", false, "Use git date format")
+	var mtime = flag.Bool("mtime", false, "Use modification time of files")
 	flag.Parse()
 	var f string
 	if *email {
@@ -27,7 +29,17 @@ func main() {
 	args := flag.Args()
 	if len(args) > 0 {
 		for i := range args {
-			t, err := time.Parse(f, args[i])
+			var t time.Time
+			var err error
+			if *mtime {
+				var s os.FileInfo
+				s, err = os.Stat(args[i])
+				if err == nil {
+					t = s.ModTime()
+				}
+			} else {
+				t, err = time.Parse(f, args[i])
+			}
 			oei.ErrorHandler(err)
 			printtln(t)
 		}
