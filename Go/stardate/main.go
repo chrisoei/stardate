@@ -20,7 +20,7 @@ func main() {
 	flag.Parse()
 	var f string
 	if *email {
-		f = "Mon, 02 Jan 2006 15:04:05 -0700"
+		f = "Mon, 2 Jan 2006 15:04:05 -0700"
 	} else if *git {
 		f = "Mon Jan 2 15:04:05 2006 -0700"
 	} else {
