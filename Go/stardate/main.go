@@ -18,10 +18,15 @@ func printtln(t time.Time) {
 func handler(w http.ResponseWriter, r *http.Request) {
 	const lenPath = len("/stardate/")
 	f := "2006-01-02 15:04:05 MST"
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	t, err := time.Parse(f, r.URL.Path[lenPath:])
-	oei.ErrorHandler(err)
-	sd := stardate.New(t)
-	fmt.Fprintf(w, sd.String())
+	if err == nil {
+		sd := stardate.New(t)
+		fmt.Fprintf(w, sd.String())
+	} else {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return;
+	}
 }
 
 func main() {
