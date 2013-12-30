@@ -1,4 +1,4 @@
-StarDate = require './StarDate.coffee'
+StarDate = require './stardate'
 
 new StarDate(1)
 
