@@ -1,0 +1,13 @@
+{
+    "name": "stardate",
+    "description": "Represent dates as fractional years",
+    "version": "0.0.1",
+    "dependencies": {},
+    "devDependencies": {
+        "coffee-script": "1.x"
+    },
+    "scripts": {
+        "build":        "coffee --bare --compile --output lib/stardate src/stardate.coffee",
+        "prepublish":   "coffee --bare --compile --output lib/stardate src/stardate.coffee"
+    }
+}

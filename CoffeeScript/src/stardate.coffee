@@ -24,7 +24,7 @@ module.exports = class StarDate
           @stardate = y + (t - t0) / (t1 - t0)
         else if d instanceof StarDate
           @stardate = d.stardate
-          @date = d.date
+          @date = new Date(d.date)
         else
           throw "Unable to convert #{d} to StarDate"
       else
