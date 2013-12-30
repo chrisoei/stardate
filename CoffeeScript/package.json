@@ -1,7 +1,7 @@
 {
     "name": "stardate",
     "description": "Represent dates as fractional years",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "dependencies": {},
     "devDependencies": {
         "coffee-script": "1.x"
