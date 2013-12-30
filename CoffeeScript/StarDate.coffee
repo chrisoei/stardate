@@ -1,6 +1,6 @@
 module.exports = class StarDate
 
-  constructor: (d) ->
+  constructor: (d = new Date()) ->
     switch typeof d
       when 'number'
         @stardate = d
