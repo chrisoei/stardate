@@ -4,11 +4,10 @@ module.exports = class StarDate
     switch typeof d
       when 'number'
         @stardate = d
-        y0 = Math.floor d
-        y1 = y0 + 1
-        t0 = Date.UTC y0, 0, 1, 0, 0, 0, 0
-        t1 = Date.UTC y1, 0, 1, 0, 0, 0, 0
-        @date = new Date(t0 + (t1 - t0) * (d - y0))
+        y = Math.floor d
+        t0 = Date.UTC y, 0, 1, 0, 0, 0, 0
+        t1 = Date.UTC y + 1, 0, 1, 0, 0, 0, 0
+        @date = new Date(t0 + (t1 - t0) * (d - y))
       when 'object'
         if d instanceof Date
           @date = new Date(d)
