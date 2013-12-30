@@ -1,13 +1,14 @@
 {
     "name": "stardate",
     "description": "Represent dates as fractional years",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "dependencies": {},
     "devDependencies": {
         "coffee-script": "1.x"
     },
+    "main": "lib/stardate.js",
     "scripts": {
-        "build":        "coffee --bare --compile --output lib/stardate src/stardate.coffee",
-        "prepublish":   "coffee --bare --compile --output lib/stardate src/stardate.coffee"
+        "build":        "coffee --bare --compile --output lib src/stardate.coffee",
+        "prepublish":   "coffee --bare --compile --output lib src/stardate.coffee"
     }
 }
