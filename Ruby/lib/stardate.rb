@@ -92,6 +92,12 @@ class Stardate
     StardateInterval.new arg, self
   end
 
+  alias_method :canonical, :to_s
+
+  def short
+    sprintf("%.3f", @stardate)
+  end
+
   def inspect
     [
       to_s,
