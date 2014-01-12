@@ -92,8 +92,6 @@ class Stardate
     StardateInterval.new arg, self
   end
 
-  alias_method :canonical, :to_s
-
   def short
     sprintf("%.3f", @stardate)
   end
@@ -150,6 +148,7 @@ class Stardate
   def to_s
     sprintf("%.15f", @stardate)
   end
+  alias_method :canonical, :to_s
 
   def to_time
     y0 = @stardate.to_i
