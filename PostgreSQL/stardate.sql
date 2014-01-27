@@ -1,5 +1,7 @@
 CREATE OR REPLACE
-FUNCTION to_stardate(d TIMESTAMP WITH TIME ZONE) RETURNS DOUBLE PRECISION AS $$
+FUNCTION to_stardate(d timestamp with time zone) RETURNS double precision    LANGUAGE plpgsql IMMUTABLE STRICT
+    SET "TimeZone" TO 'UTC'
+    AS $$
 DECLARE
   y INTEGER;
   du TIMESTAMP WITH TIME ZONE;
@@ -12,4 +14,4 @@ BEGIN
   db = to_timestamp((y + 1) || '-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS');
   RETURN y + extract(epoch FROM (du - da)) / extract(epoch FROM (db - da));
 END;
-$$ LANGUAGE plpgsql STRICT IMMUTABLE SET TIMEZONE = 'UTC';
+$$;
