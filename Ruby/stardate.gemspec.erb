@@ -6,7 +6,12 @@ Gem::Specification.new do |s|
   s.description = 'Stardate representation'
   s.authors = 'Chris Oei'
   s.email = 'xcko-rubygems@yahoo.com'
-  s.files = [ 'lib/stardate.rb', 'lib/stardate_interval.rb' ]
+  s.files = [
+    'bin/stardate',
+    'lib/stardate.rb',
+    'lib/stardate_interval.rb'
+  ]
+  s.executables = [ 'stardate' ]
   s.require_paths = ["lib"]
   s.homepage = 'http://www.oei.me'
 end
