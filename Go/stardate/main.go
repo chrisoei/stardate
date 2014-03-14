@@ -8,15 +8,20 @@ import (
 	"time"
 )
 
-func printtln(t time.Time) {
+func printtln(t time.Time, nl bool) {
 	sd := stardate.New(t)
-	println(sd.String())
+	if nl {
+		println(sd.String())
+	} else {
+		print(sd.String())
+	}
 }
 
 func main() {
 	var email = flag.Bool("email", false, "Use email date format")
 	var git = flag.Bool("git", false, "Use git date format")
 	var mtime = flag.Bool("mtime", false, "Use modification time of files")
+	var nl = flag.Bool("nl", false, "Use newline")
 	flag.Parse()
 	var f string
 	if *email {
@@ -43,10 +48,10 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			printtln(t)
+			printtln(t, *nl)
 		}
 	} else {
-		printtln(time.Now())
+		printtln(time.Now(), *nl)
 	}
 }
 
