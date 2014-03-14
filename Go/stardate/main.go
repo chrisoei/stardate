@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/chrisoei/go-stardate"
-	"github.com/chrisoei/oei"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -25,7 +25,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, sd.String())
 	} else {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return;
+		return
 	}
 }
 
@@ -61,10 +61,14 @@ func main() {
 			} else {
 				t, err = time.Parse(f, args[i])
 			}
-			oei.ErrorHandler(err)
+			if err != nil {
+				log.Fatalln(err)
+			}
 			printtln(t)
 		}
 	} else {
 		printtln(time.Now())
 	}
 }
+
+// vim: noet sts=2 sw=2 ts=2
