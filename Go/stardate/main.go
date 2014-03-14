@@ -2,10 +2,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/chrisoei/go-stardate"
 	"log"
-	"net/http"
 	"os"
 	"time"
 )
@@ -15,35 +13,16 @@ func printtln(t time.Time) {
 	println(sd.String())
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	const lenPath = len("/stardate/")
-	f := "2006-01-02 15:04:05 MST"
-	w.Header().Add("Access-Control-Allow-Origin", "*")
-	t, err := time.Parse(f, r.URL.Path[lenPath:])
-	if err == nil {
-		sd := stardate.New(t)
-		fmt.Fprintf(w, sd.String())
-	} else {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-}
-
 func main() {
 	var email = flag.Bool("email", false, "Use email date format")
 	var git = flag.Bool("git", false, "Use git date format")
 	var mtime = flag.Bool("mtime", false, "Use modification time of files")
-	var port = flag.Int("port", 0, "Port to listen on")
 	flag.Parse()
 	var f string
 	if *email {
 		f = "Mon, 2 Jan 2006 15:04:05 -0700"
 	} else if *git {
 		f = "Mon Jan 2 15:04:05 2006 -0700"
-	} else if *port > 0 {
-		portSpec := fmt.Sprintf(":%d", *port)
-		http.HandleFunc("/stardate/", handler)
-		http.ListenAndServe(portSpec, nil)
 	} else {
 		f = "2006-01-02 15:04:05 -0700"
 	}
