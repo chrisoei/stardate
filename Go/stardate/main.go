@@ -11,9 +11,9 @@ import (
 func printtln(t time.Time, nl bool) {
 	sd := stardate.New(t)
 	if nl {
-		println(sd.String())
+		os.Stdout.Write([]byte(sd.Canonical() + "\n"))
 	} else {
-		print(sd.String())
+		os.Stdout.Write([]byte(sd.Canonical()))
 	}
 }
 
