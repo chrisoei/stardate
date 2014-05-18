@@ -1,5 +1,6 @@
 CREATE OR REPLACE
-FUNCTION to_stardate(d timestamp with time zone) RETURNS double precision    LANGUAGE plpgsql IMMUTABLE STRICT
+FUNCTION to_stardate(d timestamp with time zone) RETURNS double precision
+LANGUAGE plpgsql IMMUTABLE STRICT
     SET "TimeZone" TO 'UTC'
     AS $$
 DECLARE
