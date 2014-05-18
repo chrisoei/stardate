@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"github.com/chrisoei/go-stardate"
+	"stardate"
 	"log"
 	"os"
 	"time"
