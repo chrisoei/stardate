@@ -2,19 +2,24 @@ package main
 
 import (
 	"flag"
-	"stardate"
 	"log"
 	"os"
+	"stardate"
 	"time"
 )
 
-func printtln(t time.Time, nl bool) {
+func printtln(short bool, t time.Time, nl bool) {
 	sd := stardate.New(t)
-	if nl {
-		os.Stdout.Write([]byte(sd.Canonical() + "\n"))
+	var txt string
+	if short {
+		txt = sd.Short()
 	} else {
-		os.Stdout.Write([]byte(sd.Canonical()))
+		txt = sd.Canonical()
 	}
+	if nl {
+		txt = txt + "\n"
+	}
+	os.Stdout.Write([]byte(txt))
 }
 
 func main() {
@@ -22,6 +27,7 @@ func main() {
 	var git = flag.Bool("git", false, "Use git date format")
 	var mtime = flag.Bool("mtime", false, "Use modification time of files")
 	var nl = flag.Bool("nl", false, "Use newline")
+	var short = flag.Bool("short", false, "Use short form")
 	flag.Parse()
 	var f string
 	if *email {
@@ -48,10 +54,10 @@ func main() {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			printtln(t, *nl)
+			printtln(*short, t, *nl)
 		}
 	} else {
-		printtln(time.Now(), *nl)
+		printtln(*short, time.Now(), *nl)
 	}
 }
 
