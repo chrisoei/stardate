@@ -46,8 +46,8 @@ double getStarDateFromTimestamp(const char* ts) {
 #ifdef CKOEI_MAIN
 int main(int argc, char* argv[]) {
 	struct timeval tv;
-	gettimeofday(&tv,NULL);
-	printf("%0.12lf\n",getStarDateFromTimeVal(tv));	
- 	return 0; 
+	gettimeofday(&tv ,NULL);
+	printf("%0.15lf\n", getStarDateFromTimeVal(tv));
+ 	return 0;
 }
 #endif
