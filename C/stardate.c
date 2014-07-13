@@ -28,9 +28,7 @@ double getStarDateFromTM(struct tm* x) {
 }
 
 double getStarDateFromTime(time_t t) {
-  struct tm mytime;
-  mytime = *gmtime(&t);
-  return getStarDateFromTM(&mytime);
+  return getStarDateFromTM(gmtime(&t));
 }
 
 double getStarDateFromTimeVal(struct timeval t) {
@@ -100,12 +98,8 @@ int main(int argc, char* argv[]) {
     gettimeofday(&tv, NULL);
     sd = getStarDateFromTimeVal(tv);
   }
-  if (short_flag) {
-    printf("%0.3lf", sd);
-  } else {
-    printf("%0.15lf", sd);
-  }
-  if (nl_flag) printf("\n");
-   return 0;
+  printf(short_flag ? "%0.3lf" : "%0.15lf", sd);
+  nl_flag && printf("\n");
+  return 0;
 }
 #endif
