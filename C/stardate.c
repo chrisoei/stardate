@@ -37,10 +37,14 @@ double getStarDateFromTimeVal(struct timeval t) {
 	return s0 + (s1 - s0) * t.tv_usec / 1.0e6;
 }
 
-double getStarDateFromTimestamp(const char* ts) {
+double getStarDateFromString(const char* fmt, const char* s) {
 	struct tm mytime;
-	char* rc = strptime(ts, "%Y-%m-%d %H:%M:%S", &mytime);
+	char* rc = strptime(s, fmt, &mytime);
 	return getStarDateFromTM(&mytime);
+}
+
+double getStarDateFromTimestamp(const char* ts) {
+  return getStarDateFromString("%Y-%m-%d %H:%M:%S", ts);
 }
 
 #ifdef CKOEI_MAIN
