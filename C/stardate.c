@@ -21,7 +21,7 @@ double getStarDateFromTM(struct tm* x) {
 	double y0 = (double)getYearInSeconds(x->tm_year);
 	double y1 = (double)getYearInSeconds(x->tm_year + 1);
 	double yn = timegm(x);
-	return 1900 + x->tm_year + (yn - y0)/(y1 - y0);
+	return 1900 + x->tm_year + (yn - y0) / (y1 - y0);
 }
 
 double getStarDateFromTimeVal(struct timeval t) {
