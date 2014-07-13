@@ -1,6 +1,8 @@
+#include <stdlib.h>
 #include <time.h>
 #include <sys/time.h>
 #include <stdio.h>
+#include <getopt.h>
 
 // y is # of years since 1900 UTC
 time_t getYearInSeconds(int y) {
@@ -49,9 +51,43 @@ double getStarDateFromTimestamp(const char* ts) {
 
 #ifdef CKOEI_MAIN
 int main(int argc, char* argv[]) {
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	printf("%0.15lf\n", getStarDateFromTimeVal(tv));
+	int set_flag = 0;
+	int nl_flag = 0;
+	int short_flag = 0;
+  char c;
+  double sd;
+  while ((c = getopt(argc, argv, "e:g:ns")) != -1) {
+    switch(c) {
+      case 'e':
+        sd = getStarDateFromString("%a, %d %b %Y %H:%M:%S %z", optarg);
+				set_flag++;
+        break;
+      case 'g':
+				sd = getStarDateFromString("%a %b %d %H:%M:%S %Y %z", optarg);
+				set_flag++;
+        break;
+      case 'n':
+        nl_flag++;
+        break;
+      case 's':
+			  short_flag++;
+        break;
+      default:
+        printf("Incorrect usage\n");
+        exit(1);
+    }
+  }
+	if (!set_flag) {
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		sd = getStarDateFromTimeVal(tv);
+	}
+	if (short_flag) {
+		printf("%0.3lf", sd);
+	} else {
+		printf("%0.15lf", sd);
+	}
+	if (nl_flag) printf("\n");
  	return 0;
 }
 #endif
