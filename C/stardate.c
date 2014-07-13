@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
+#include <sys/stat.h>
 #include <sys/time.h>
 #include <stdio.h>
 #include <getopt.h>
@@ -24,6 +25,12 @@ double getStarDateFromTM(struct tm* x) {
   double y1 = (double)getYearInSeconds(x->tm_year + 1);
   double yn = timegm(x);
   return 1900 + x->tm_year + (yn - y0) / (y1 - y0);
+}
+
+double getStarDateFromTime(time_t t) {
+  struct tm mytime;
+  mytime = *gmtime(&t);
+  return getStarDateFromTM(&mytime);
 }
 
 double getStarDateFromTimeVal(struct timeval t) {
@@ -54,9 +61,13 @@ int main(int argc, char* argv[]) {
   int set_flag = 0;
   int nl_flag = 0;
   int short_flag = 0;
+  int rc = 0;
   char c;
+  struct timeval tv;
+  struct stat st;
   double sd;
-  while ((c = getopt(argc, argv, "e:g:ns")) != -1) {
+
+  while ((c = getopt(argc, argv, "e:g:m:ns")) != -1) {
     switch(c) {
       case 'e':
         sd = getStarDateFromString("%a, %d %b %Y %H:%M:%S %z", optarg);
@@ -64,6 +75,14 @@ int main(int argc, char* argv[]) {
         break;
       case 'g':
         sd = getStarDateFromString("%a %b %d %H:%M:%S %Y %z", optarg);
+        set_flag++;
+        break;
+      case 'm':
+        if ((rc = lstat(optarg ,&st))) {
+          fprintf(stderr, "lstat error %d for %s\n", rc, optarg);
+          exit(1);
+        }
+        sd = getStarDateFromTime(st.st_mtime);
         set_flag++;
         break;
       case 'n':
@@ -78,7 +97,6 @@ int main(int argc, char* argv[]) {
     }
   }
   if (!set_flag) {
-    struct timeval tv;
     gettimeofday(&tv, NULL);
     sd = getStarDateFromTimeVal(tv);
   }
