@@ -6,7 +6,7 @@
 #include <getopt.h>
 
 // y is # of years since 1900 UTC
-time_t getYearInSeconds(int y) {
+static time_t getYearInSeconds(int y) {
   struct tm mytime;
   mytime.tm_sec = 0;
   mytime.tm_min = 0;
