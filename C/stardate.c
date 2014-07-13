@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
         short_flag++;
         break;
       default:
-        fprintf("Incorrect usage\n");
+        fprintf(stderr, "Incorrect usage\n");
         exit(1);
     }
   }
