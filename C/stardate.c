@@ -32,15 +32,12 @@ double getStarDateFromTime(time_t t) {
 }
 
 double getStarDateFromTimeVal(struct timeval t) {
-  struct tm mytime;
   time_t tsec;
 
   tsec = t.tv_sec;
-  mytime = *gmtime(&tsec);
-  double s0 = getStarDateFromTM(&mytime);
+  double s0 = getStarDateFromTime(tsec);
   tsec++;
-  mytime = *gmtime(&tsec);
-  double s1 = getStarDateFromTM(&mytime);
+  double s1 = getStarDateFromTime(tsec);
   return s0 + (s1 - s0) * t.tv_usec / 1.0e6;
 }
 
