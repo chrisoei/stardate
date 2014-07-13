@@ -38,7 +38,7 @@ double getStarDateFromTimeVal(struct timeval t) {
 }
 
 double getStarDateFromString(const char* fmt, const char* s) {
-  struct tm mytime;
+  static struct tm mytime;
   char* rc = strptime(s, fmt, &mytime);
   return getStarDateFromTM(&mytime);
 }
@@ -54,8 +54,8 @@ int main(int argc, char* argv[]) {
   int short_flag = 0;
   int rc = 0;
   char c;
-  struct timeval tv;
-  struct stat st;
+  static struct timeval tv;
+  static struct stat st;
   double sd;
 
   while ((c = getopt(argc, argv, "e:g:m:ns")) != -1) {
