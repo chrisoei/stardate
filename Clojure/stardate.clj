@@ -1,11 +1,15 @@
-(import '(java.time ZonedDateTime ZoneId))
+(ns stardate)
 
-(defn stardate 
+(import '(java.time Instant ZonedDateTime ZoneId))
+
+(def utc (ZoneId/of "UTC"))
+
+(defn get-start-of-year [y]
+  (.toEpochSecond (ZonedDateTime/of y 1 1 0 0 0 0 utc)))
+
+(defn of
   ([#^ZonedDateTime zdt] ; if called with ZoneDateTime argument
     (let [
-        utc (ZoneId/of "UTC")
-        get-start-of-year
-          #(.toEpochSecond (ZonedDateTime/of %1 1 1 0 0 0 0 utc))
         y (.getYear (.withZoneSameInstant zdt utc))
         t0 (get-start-of-year y)
         t1 (get-start-of-year (inc y))
@@ -14,6 +18,25 @@
       (+ y (/ (double (- t t0)) (- t1 t0)))
     ))
   ([] ; if no arguments supplied, use now
-    (stardate (ZonedDateTime/now))
+    (of (ZonedDateTime/now))
+  )
+)
+
+(defn toInstant
+  [sd]
+  (let [
+      y (int sd)
+      t0 (get-start-of-year y)
+      t1 (get-start-of-year (inc y))
+      t (+ t0 (* (- sd y) (- t1 t0)))
+    ]
+    (Instant/ofEpochMilli (long (* 1000 t)))
+  )
+)
+
+
+(defn toZonedDateTime
+  ([sd z]
+    (.atZone (toInstant sd) (ZoneId/of z))
   )
 )
