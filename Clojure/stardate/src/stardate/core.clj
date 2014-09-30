@@ -1,4 +1,4 @@
-(ns stardate)
+(ns stardate.core)
 
 (import '(java.time Instant ZonedDateTime ZoneId))
 
