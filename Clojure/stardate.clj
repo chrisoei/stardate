@@ -23,7 +23,7 @@
 )
 
 (defn toInstant
-  [sd]
+  [#^Double sd]
   (let [
       y (int sd)
       t0 (get-start-of-year y)
@@ -35,7 +35,7 @@
 )
 
 (defn toZonedDateTime
-  ([sd z]
+  ([#^Double sd #^String z]
     (.atZone (toInstant sd) (ZoneId/of z))
   )
 )
