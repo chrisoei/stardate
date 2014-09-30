@@ -1,7 +1,7 @@
 (import '(java.time ZonedDateTime ZoneId))
 
 (defn stardate 
-  ([zdt] ; if called with ZoneDateTime argument
+  ([#^ZonedDateTime zdt] ; if called with ZoneDateTime argument
     (let [
         utc (ZoneId/of "UTC")
         get-start-of-year
