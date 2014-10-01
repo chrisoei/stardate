@@ -4,11 +4,27 @@
 
 (def utc (ZoneId/of "UTC"))
 
-(defn get-start-of-year [y]
+(defn- get-start-of-year [y]
   (.. (ZonedDateTime/of y 1 1 0 0 0 0 utc) toInstant toEpochMilli))
 
-(defn of
-   ([#^ZonedDateTime zdt] ; if called with ZoneDateTime argument
+(defn ofInstant
+  ([#^Instant i]
+    (let [
+        zdt (ZonedDateTime/ofInstant i utc)
+        y (.getYear zdt)
+        t0 (get-start-of-year y)
+        t1 (get-start-of-year (inc y))
+        t (.toEpochMilli i)
+      ]
+      (+ y (/ (double (- t t0)) (- t1 t0)))
+   ))
+  ([] ; if no arguments supplied, use now
+    (ofInstant (Instant/now))
+  )
+)
+
+(defn ofZonedDateTime
+   ([#^ZonedDateTime zdt]
     (let [
         y (.getYear (.withZoneSameInstant zdt utc))
         t0 (get-start-of-year y)
@@ -18,7 +34,7 @@
       (+ y (/ (double (- t t0)) (- t1 t0)))
     ))
   ([] ; if no arguments supplied, use now
-    (of (ZonedDateTime/now))
+    (ofZonedDateTime (ZonedDateTime/now))
   )
 )
 
