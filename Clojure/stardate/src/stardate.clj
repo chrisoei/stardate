@@ -23,6 +23,10 @@
   )
 )
 
+(defn now []
+  (ofInstant (Instant/now))
+)
+
 (defn ofZonedDateTime
    ([#^ZonedDateTime zdt]
     (let [

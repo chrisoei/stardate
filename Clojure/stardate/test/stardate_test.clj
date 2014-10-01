@@ -26,6 +26,10 @@
   )
 )
 
+(deftest now-test
+  (testing "now"
+    (approx (stardate/now) (stardate/ofZonedDateTime (ZonedDateTime/now)))))
+
 (deftest toInstant-test
   (testing "toInstant 2014.747978420491791"
     (is (= epoch-milli-fixture
