@@ -18,19 +18,15 @@
 (def fortnight (/ 14.0 365.2425))
 (def month (/ 1 12.0))
 
-(defn ofInstant
-  ([#^Instant i]
-    (let [
-        zdt (ZonedDateTime/ofInstant i utc)
-        y (.getYear zdt)
-        t0 (get-start-of-year y)
-        t1 (get-start-of-year (inc y))
-        t (.toEpochMilli i)
-      ]
-      (+ y (/ (double (- t t0)) (- t1 t0)))
-   ))
-  ([] ; if no arguments supplied, use now
-    (ofInstant (Instant/now))
+(defn ofInstant [#^Instant i]
+  (let [
+      zdt (ZonedDateTime/ofInstant i utc)
+      y (.getYear zdt)
+      t0 (get-start-of-year y)
+      t1 (get-start-of-year (inc y))
+      t (.toEpochMilli i)
+    ]
+    (+ y (/ (double (- t t0)) (- t1 t0)))
   )
 )
 
@@ -38,18 +34,14 @@
   (ofInstant (Instant/now))
 )
 
-(defn ofZonedDateTime
-   ([#^ZonedDateTime zdt]
-    (let [
-        y (.getYear (.withZoneSameInstant zdt utc))
-        t0 (get-start-of-year y)
-        t1 (get-start-of-year (inc y))
-        t (.. zdt toInstant toEpochMilli)
-      ]
-      (+ y (/ (double (- t t0)) (- t1 t0)))
-    ))
-  ([] ; if no arguments supplied, use now
-    (ofZonedDateTime (ZonedDateTime/now))
+(defn ofZonedDateTime [#^ZonedDateTime zdt]
+  (let [
+      y (.getYear (.withZoneSameInstant zdt utc))
+      t0 (get-start-of-year y)
+      t1 (get-start-of-year (inc y))
+      t (.. zdt toInstant toEpochMilli)
+    ]
+    (+ y (/ (double (- t t0)) (- t1 t0)))
   )
 )
 
