@@ -1,4 +1,5 @@
 (ns stardate-test
+  (:refer-clojure :exclude [second])
   (:require [clojure.test :refer :all]
             [stardate :refer :all]))
 

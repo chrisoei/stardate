@@ -1,4 +1,4 @@
-(ns stardate)
+(ns stardate (:refer-clojure :exclude [second]))
 
 (import '(java.time Instant ZonedDateTime ZoneId))
 
@@ -6,6 +6,17 @@
 
 (defn- get-start-of-year [y]
   (.. (ZonedDateTime/of y 1 1 0 0 0 0 utc) toInstant toEpochMilli))
+
+; Constants are based on 365.2425 days/Gregorian year
+
+(def millisecond (/ 1 31556952000.0))
+(def second (/ 1 31556952.0)) ; potential conflict with clojure.core/second
+(def minute (/ 1 525949.2))
+(def hour (/ 1 8765.82))
+(def day (/ 1 365.2425))
+(def week (/ 7.0 365.2425))
+(def fortnight (/ 14.0 365.2425))
+(def month (/ 1 12.0))
 
 (defn ofInstant
   ([#^Instant i]
