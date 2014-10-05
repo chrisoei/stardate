@@ -4,8 +4,9 @@
 
 (def utc (ZoneId/of "UTC"))
 
-(defn- get-start-of-year [y]
-  (.. (ZonedDateTime/of y 1 1 0 0 0 0 utc) toInstant toEpochMilli))
+(def ^:private get-start-of-year
+  (memoize (fn [y]
+    (.. (ZonedDateTime/of y 1 1 0 0 0 0 utc) toInstant toEpochMilli))))
 
 ; Constants are based on 365.2425 days/Gregorian year
 
