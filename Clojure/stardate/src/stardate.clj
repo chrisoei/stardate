@@ -1,6 +1,9 @@
 (ns stardate (:refer-clojure :exclude [second]))
 
 (import '(java.time Instant ZonedDateTime ZoneId))
+(import '(java.text SimpleDateFormat))
+(import '(java.util Locale))
+
 
 (def utc (ZoneId/of "UTC"))
 
@@ -69,8 +72,17 @@
 (defmethod of Instant [i] (ofInstant i))
 (defmethod of Double [sd] sd)
 (defmethod of java.util.GregorianCalendar [gc] (of (.toZonedDateTime gc)))
+(defmethod of java.util.Date [d] (of (.toInstant d)))
 
 (defn canonical
   ([] (canonical (now)))
   ([x] (format "%.15f" (of x)))
+)
+
+(let [rfc2822 (SimpleDateFormat.
+               "EEE, dd MMM yyyy HH:mm:ss Z"
+               Locale/ENGLISH)]
+  (defn ofRFC2822 [#^String x]
+    (of (.parse rfc2822 x))
+  )
 )

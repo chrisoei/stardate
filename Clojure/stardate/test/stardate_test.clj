@@ -27,6 +27,13 @@
   )
 )
 
+(deftest ofRFC2822-test
+  (testing "ofRFC2822 Tue, 30 Sep 2014 17:17:27 -0700"
+    (approx (stardate/ofRFC2822 "Tue, 30 Sep 2014 17:17:27 -0700")
+            stardate-fixture)
+  )
+)
+
 (deftest of-test
   (testing "of ZonedDateTime 30 Sep 2014 17:17:27 -0700"
     (approx (stardate/of zdt-fixture) stardate-fixture)
@@ -54,4 +61,3 @@
         toInstant toEpochMilli)))
   )
 )
-
