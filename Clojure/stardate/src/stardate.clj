@@ -86,3 +86,11 @@
     (of (.parse rfc2822 x))
   )
 )
+
+(let [git-format (SimpleDateFormat.
+               "EEE MMM dd HH:mm:ss yyyy Z"
+               Locale/ENGLISH)]
+  (defn ofGitFormat [#^String x]
+    (of (.parse git-format x))
+  )
+)

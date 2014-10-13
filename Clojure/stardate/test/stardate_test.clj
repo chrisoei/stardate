@@ -34,6 +34,13 @@
   )
 )
 
+(deftest ofGitFormat-test
+  (testing "ofGitFormat Tue Sep 30 17:17:27 2014 -0700"
+    (approx (stardate/ofGitFormat "Tue Sep 30 17:17:27 2014 -0700")
+            stardate-fixture)
+  )
+)
+
 (deftest of-test
   (testing "of ZonedDateTime 30 Sep 2014 17:17:27 -0700"
     (approx (stardate/of zdt-fixture) stardate-fixture)
