@@ -27,6 +27,15 @@
   )
 )
 
+(deftest of-test
+  (testing "of ZonedDateTime 30 Sep 2014 17:17:27 -0700"
+    (approx (stardate/of zdt-fixture) stardate-fixture)
+  )
+  (testing "of Instant 30 Sep 2014 17:17:27 -0700"
+    (approx (stardate/of i-fixture) stardate-fixture)
+  )
+)
+
 (deftest now-test
   (testing "now"
     (approx (stardate/now) (stardate/ofZonedDateTime (ZonedDateTime/now)))))

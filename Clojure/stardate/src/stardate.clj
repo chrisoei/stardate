@@ -63,3 +63,14 @@
     (.atZone (toInstant sd) (ZoneId/of z))
   )
 )
+
+(defmulti of class)
+(defmethod of ZonedDateTime [zdt] (ofZonedDateTime zdt))
+(defmethod of Instant [i] (ofInstant i))
+(defmethod of Double [sd] sd)
+(defmethod of java.util.GregorianCalendar [gc] (of (.toZonedDateTime gc)))
+
+(defn canonical
+  ([] (canonical (now)))
+  ([x] (format "%.15f" (of x)))
+)
