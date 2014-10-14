@@ -84,6 +84,12 @@
   ([x] (format "%.3f" (of x)))
 )
 
+(defn ofISO8601
+  "Convert ISO8601 string to stardate"
+  [#^String x]
+  (of (javax.xml.bind.DatatypeConverter/parseDateTime x))
+)
+
 (let [rfc2822 (SimpleDateFormat.
                "EEE, dd MMM yyyy HH:mm:ss Z"
                Locale/ENGLISH)]

@@ -33,6 +33,13 @@
   )
 )
 
+(deftest ofISO8601-test
+  (testing "ofISO8601 2014-09-30T17:17:27-07:00"
+    (approx (stardate/ofISO8601 "2014-09-30T17:17:27-07:00")
+            stardate-fixture)
+  )
+)
+
 (deftest ofRFC2822-test
   (testing "ofRFC2822 Tue, 30 Sep 2014 17:17:27 -0700"
     (approx (stardate/ofRFC2822 "Tue, 30 Sep 2014 17:17:27 -0700")
