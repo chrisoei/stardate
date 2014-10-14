@@ -1,4 +1,4 @@
-(defproject stardate "3.3.0"
+(defproject stardate "3.4.0"
   :description "A library that converts to/from fractional years. Requires Java 8+."
   :url "http://github.com/chrisoei/stardate"
   :scm {

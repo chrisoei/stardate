@@ -1,4 +1,4 @@
-(ns stardate (:refer-clojure :exclude [second]))
+(ns stardate (:refer-clojure :exclude [second short]))
 
 (import '(java.time Instant ZonedDateTime ZoneId))
 (import '(java.text SimpleDateFormat))
@@ -77,6 +77,11 @@
 (defn canonical
   ([] (canonical (now)))
   ([x] (format "%.15f" (of x)))
+)
+
+(defn short
+  ([] (short (now)))
+  ([x] (format "%.3f" (of x)))
 )
 
 (let [rfc2822 (SimpleDateFormat.

@@ -1,5 +1,5 @@
 (ns stardate-test
-  (:refer-clojure :exclude [second])
+  (:refer-clojure :exclude [second short])
   (:require [clojure.test :refer :all]
             [stardate :refer :all]))
 
@@ -18,6 +18,12 @@
 (deftest ofZonedDateTime-test
   (testing "ofZonedDateTime 30 Sep 2014 17:17:27 -0700"
     (approx (stardate/ofZonedDateTime zdt-fixture) stardate-fixture)
+  )
+)
+
+(deftest short-test
+  (testing "short"
+    (is (= "2014.748" (stardate/short stardate-fixture)))
   )
 )
 
