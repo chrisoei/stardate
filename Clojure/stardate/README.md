@@ -1,8 +1,9 @@
-[![Clojars Project](http://clojars.org/stardate/latest-version.svg)](http://clojars.org/stardate)
-
-# stardate
+# Stardate
 
 A Clojure library designed to represent time as fractional years.
+
+## Latest version
+[![Clojars Project](http://clojars.org/stardate/latest-version.svg)](http://clojars.org/stardate)
 
 ## Usage
 
