@@ -11,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 
@@ -78,6 +80,18 @@ public class ConverterActivity extends Activity {
             tp.setCurrentHour(13);
             tp.setCurrentMinute(47);
             tp.setOnTimeChangedListener(new TimeChangedListener());
+            Spinner sp = (Spinner) rootView.findViewById(R.id.spinner);
+            sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d("stardate", "Time zone " + position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
             return rootView;
         }
     }
