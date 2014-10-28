@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 
@@ -55,15 +57,33 @@ public class ConverterActivity extends Activity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        public static int year;
+        public static int monthOfYear;
+        public static int dayOfMonth;
+        public static int hourOfDay;
+        public static int minute;
+        public static int timeZone;
+
+        public static void updateStardate(View rootView) {
+            ((EditText)rootView.findViewById(R.id.editText)).setText("2014.987", TextView.BufferType.EDITABLE);
+        }
+
         public static class DateChangedListener implements DatePicker.OnDateChangedListener {
             public void onDateChanged(DatePicker dp, int year, int monthOfYear, int dayOfMonth) {
+                PlaceholderFragment.year = year;
+                PlaceholderFragment.monthOfYear = monthOfYear;
+                PlaceholderFragment.dayOfMonth = dayOfMonth;
                 Log.d("stardate", year + "-" + (monthOfYear+1) + "-" + dayOfMonth);
+                updateStardate(dp.getRootView());
             }
         }
 
         public static class TimeChangedListener implements TimePicker.OnTimeChangedListener {
             public void onTimeChanged(TimePicker tp, int hourOfDay, int minute) {
+                PlaceholderFragment.hourOfDay = hourOfDay;
+                PlaceholderFragment.minute = minute;
                 Log.d("stardate", hourOfDay + ":" + minute);
+                updateStardate(tp.getRootView());
             }
         }
 
@@ -84,7 +104,9 @@ public class ConverterActivity extends Activity {
             sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    PlaceholderFragment.timeZone = position;
                     Log.d("stardate", "Time zone " + position);
+                    updateStardate(view.getRootView());
                 }
 
                 @Override
