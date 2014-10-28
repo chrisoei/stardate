@@ -64,15 +64,16 @@ public class ConverterActivity extends Activity {
      */
     public static class PlaceholderFragment extends Fragment {
 
-        public static int year;
-        public static int monthOfYear;
-        public static int dayOfMonth;
-        public static int hourOfDay;
-        public static int minute;
-        public static int timeZone;
+        public static DatePicker datePicker;
+        public static TimePicker timePicker;
+        public static Spinner spinner;
+        public static EditText editText;
+
+        public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+        public static final Locale LOCALE = Locale.ENGLISH;
 
         private static long getStartOfYear(int y) {
-            Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"), Locale.ENGLISH);
+            Calendar cal = new GregorianCalendar(UTC, LOCALE);
             cal.set(Calendar.YEAR, y);
             cal.set(Calendar.MONTH, Calendar.JANUARY);
             cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -83,28 +84,32 @@ public class ConverterActivity extends Activity {
             return cal.getTimeInMillis();
         }
 
-        public static void updateStardate(View rootView) {
-            TimeZone tz;
-            switch (PlaceholderFragment.timeZone) {
+        protected static TimeZone getSelectedTimeZone() {
+            switch (spinner.getSelectedItemPosition()) {
                 case 0:
-                    tz = TimeZone.getTimeZone("America/Los_Angeles");
-                    break;
+                    return TimeZone.getTimeZone("America/Los_Angeles");
                 case 1:
-                    tz = TimeZone.getTimeZone("Asia/Kolkata");
-                    break;
+                    return TimeZone.getTimeZone("Asia/Kolkata");
                 case 2:
-                    tz = TimeZone.getTimeZone("UTC");
-                    break;
+                    return UTC;
                 default:
                     throw new RuntimeException("Unknown time zone");
 
             }
-            Calendar cal = new GregorianCalendar(tz, Locale.ENGLISH);
+        }
+
+        protected static Calendar getSelectedCalendar() {
+            return new GregorianCalendar(getSelectedTimeZone(), LOCALE);
+        }
+
+        public static void updateStardate() {
+            Calendar cal = getSelectedCalendar();
+            int year = datePicker.getYear();
             cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, monthOfYear);
-            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            cal.set(Calendar.MINUTE, minute);
+            cal.set(Calendar.MONTH, datePicker.getMonth());
+            cal.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+            cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+            cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
             long millis = cal.getTimeInMillis();
@@ -114,60 +119,30 @@ public class ConverterActivity extends Activity {
             Log.d("stardate", "year = " + year + ", y0 = " + y0 + ", y1 = " + y1 + ", millis = " + millis + ", sd = " + sd);
             String x = String.format("%.15f", Double.valueOf(sd));
 
-            ((EditText)rootView.findViewById(R.id.editText)).setText(x, TextView.BufferType.EDITABLE);
+            editText.setText(x, TextView.BufferType.EDITABLE);
         }
 
         public static void updatePickers(View rootView) {
-            TimeZone tz;
-            switch (PlaceholderFragment.timeZone) {
-                case 0:
-                    tz = TimeZone.getTimeZone("America/Los_Angeles");
-                    break;
-                case 1:
-                    tz = TimeZone.getTimeZone("Asia/Kolkata");
-                    break;
-                case 2:
-                    tz = TimeZone.getTimeZone("UTC");
-                    break;
-                default:
-                    throw new RuntimeException("Unknown time zone");
-
-            }
             double y = Double.parseDouble(((EditText)rootView.findViewById(R.id.editText)).getText().toString());
             int y0 = (int) y;
             long t0 = getStartOfYear(y0);
             long t1 = getStartOfYear(y0 + 1);
             long millis = (long) (t0 + (t1 - t0) * (y - y0));
-            Calendar cal = new GregorianCalendar(tz, Locale.ENGLISH);
+            Calendar cal = getSelectedCalendar();
             cal.setTimeInMillis(millis);
-            DatePicker dp = (DatePicker) rootView.findViewById(R.id.datePicker);
-            dp.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-            TimePicker tp = (TimePicker) rootView.findViewById(R.id.timePicker);
-            tp.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
-            tp.setCurrentMinute(cal.get(Calendar.MINUTE));
-            PlaceholderFragment.year = cal.get(Calendar.YEAR);
-            PlaceholderFragment.monthOfYear = cal.get(Calendar.MONTH);
-            PlaceholderFragment.dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-            PlaceholderFragment.hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
-            PlaceholderFragment.minute = cal.get(Calendar.MINUTE);
+            datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
         }
 
         public static class DateChangedListener implements DatePicker.OnDateChangedListener {
             public void onDateChanged(DatePicker dp, int year, int monthOfYear, int dayOfMonth) {
-                PlaceholderFragment.year = year;
-                PlaceholderFragment.monthOfYear = monthOfYear;
-                PlaceholderFragment.dayOfMonth = dayOfMonth;
-                Log.d("stardate", year + "-" + (monthOfYear+1) + "-" + dayOfMonth);
-                updateStardate(dp.getRootView());
+                updateStardate();
             }
         }
 
         public static class TimeChangedListener implements TimePicker.OnTimeChangedListener {
             public void onTimeChanged(TimePicker tp, int hourOfDay, int minute) {
-                PlaceholderFragment.hourOfDay = hourOfDay;
-                PlaceholderFragment.minute = minute;
-                Log.d("stardate", hourOfDay + ":" + minute);
-                updateStardate(tp.getRootView());
+                updateStardate();
             }
         }
 
@@ -178,19 +153,17 @@ public class ConverterActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_converter, container, false);
-            DatePicker dp = (DatePicker) rootView.findViewById(R.id.datePicker);
-            dp.init(2014, 9, 28, new DateChangedListener());
-            TimePicker tp = (TimePicker) rootView.findViewById(R.id.timePicker);
-            tp.setCurrentHour(13);
-            tp.setCurrentMinute(47);
-            tp.setOnTimeChangedListener(new TimeChangedListener());
-            Spinner sp = (Spinner) rootView.findViewById(R.id.spinner);
-            sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            datePicker = (DatePicker) rootView.findViewById(R.id.datePicker);
+            datePicker.init(2014, 9, 28, new DateChangedListener());
+            timePicker = (TimePicker) rootView.findViewById(R.id.timePicker);
+            timePicker.setCurrentHour(13);
+            timePicker.setCurrentMinute(47);
+            timePicker.setOnTimeChangedListener(new TimeChangedListener());
+            spinner = (Spinner) rootView.findViewById(R.id.spinner);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    PlaceholderFragment.timeZone = position;
-                    Log.d("stardate", "Time zone " + position);
-                    updateStardate(view.getRootView());
+                    updateStardate();
                 }
 
                 @Override
@@ -198,8 +171,8 @@ public class ConverterActivity extends Activity {
 
                 }
             });
-            EditText et = (EditText) rootView.findViewById(R.id.editText);
-            et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            editText = (EditText) rootView.findViewById(R.id.editText);
+            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
