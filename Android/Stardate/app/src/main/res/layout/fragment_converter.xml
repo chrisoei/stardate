@@ -32,4 +32,17 @@
         android:paddingStart="3dp"
         android:layout_centerHorizontal="true"
         android:entries="@array/timezone_names" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="20"
+        android:id="@+id/editText"
+        android:layout_below="@+id/spinner"
+        android:layout_centerHorizontal="true"
+        android:text="2014.1"
+        android:textIsSelectable="true"
+        android:paddingStart="3dp"
+        android:textSize="@dimen/output_size" />
 </RelativeLayout>
