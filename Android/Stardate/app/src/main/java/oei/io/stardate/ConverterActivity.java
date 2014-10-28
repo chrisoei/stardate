@@ -115,6 +115,41 @@ public class ConverterActivity extends Activity {
             ((EditText)rootView.findViewById(R.id.editText)).setText(x, TextView.BufferType.EDITABLE);
         }
 
+        public static void updatePickers(View rootView) {
+            TimeZone tz;
+            switch (PlaceholderFragment.timeZone) {
+                case 0:
+                    tz = TimeZone.getTimeZone("America/Los_Angeles");
+                    break;
+                case 1:
+                    tz = TimeZone.getTimeZone("Asia/Kolkata");
+                    break;
+                case 2:
+                    tz = TimeZone.getTimeZone("UTC");
+                    break;
+                default:
+                    throw new RuntimeException("Unknown time zone");
+
+            }
+            double y = Double.parseDouble(((EditText)rootView.findViewById(R.id.editText)).getText().toString());
+            int y0 = (int) y;
+            long t0 = getStartOfYear(y0);
+            long t1 = getStartOfYear(y0 + 1);
+            long millis = (long) (t0 + (t1 - t0) * (y - y0));
+            Calendar cal = new GregorianCalendar(tz, Locale.ENGLISH);
+            cal.setTimeInMillis(millis);
+            DatePicker dp = (DatePicker) rootView.findViewById(R.id.datePicker);
+            dp.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            TimePicker tp = (TimePicker) rootView.findViewById(R.id.timePicker);
+            tp.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
+            tp.setCurrentMinute(cal.get(Calendar.MINUTE));
+            PlaceholderFragment.year = cal.get(Calendar.YEAR);
+            PlaceholderFragment.monthOfYear = cal.get(Calendar.MONTH);
+            PlaceholderFragment.dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+            PlaceholderFragment.hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
+            PlaceholderFragment.minute = cal.get(Calendar.MINUTE);
+        }
+
         public static class DateChangedListener implements DatePicker.OnDateChangedListener {
             public void onDateChanged(DatePicker dp, int year, int monthOfYear, int dayOfMonth) {
                 PlaceholderFragment.year = year;
