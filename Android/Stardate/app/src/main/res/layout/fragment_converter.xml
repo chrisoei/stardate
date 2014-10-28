@@ -30,5 +30,6 @@
         android:id="@+id/spinner"
         android:layout_below="@+id/timePicker"
         android:paddingStart="3dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:entries="@array/timezone_names" />
 </RelativeLayout>

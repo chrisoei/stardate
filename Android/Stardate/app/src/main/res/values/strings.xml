@@ -4,5 +4,10 @@
     <string name="app_name">Stardate</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="timezone_names">
+        <item>Pacific Time</item>
+        <item>India Standard Time</item>
+        <item>Coordinated Universal Time (UTC)</item>
+    </string-array>
 
 </resources>
