@@ -134,18 +134,6 @@ public class ConverterActivity extends Activity {
             timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
         }
 
-        public static class DateChangedListener implements DatePicker.OnDateChangedListener {
-            public void onDateChanged(DatePicker dp, int year, int monthOfYear, int dayOfMonth) {
-                updateStardate();
-            }
-        }
-
-        public static class TimeChangedListener implements TimePicker.OnTimeChangedListener {
-            public void onTimeChanged(TimePicker tp, int hourOfDay, int minute) {
-                updateStardate();
-            }
-        }
-
         public PlaceholderFragment() {
         }
 
@@ -154,11 +142,21 @@ public class ConverterActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_converter, container, false);
             datePicker = (DatePicker) rootView.findViewById(R.id.datePicker);
-            datePicker.init(2014, 9, 28, new DateChangedListener());
+            datePicker.init(2014, 9, 28, new DatePicker.OnDateChangedListener() {
+                        @Override
+                        public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            updateStardate();
+                        }
+                    });
             timePicker = (TimePicker) rootView.findViewById(R.id.timePicker);
             timePicker.setCurrentHour(13);
             timePicker.setCurrentMinute(47);
-            timePicker.setOnTimeChangedListener(new TimeChangedListener());
+            timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                @Override
+                public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                    updateStardate();
+                }
+            });
             spinner = (Spinner) rootView.findViewById(R.id.spinner);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
