@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 
 public class ConverterActivity extends Activity {
@@ -51,6 +53,18 @@ public class ConverterActivity extends Activity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        public static class DateChangedListener implements DatePicker.OnDateChangedListener {
+            public void onDateChanged(DatePicker dp, int year, int monthOfYear, int dayOfMonth) {
+                Log.d("stardate", year + "-" + (monthOfYear+1) + "-" + dayOfMonth);
+            }
+        }
+
+        public static class TimeChangedListener implements TimePicker.OnTimeChangedListener {
+            public void onTimeChanged(TimePicker tp, int hourOfDay, int minute) {
+                Log.d("stardate", hourOfDay + ":" + minute);
+            }
+        }
+
         public PlaceholderFragment() {
         }
 
@@ -58,6 +72,12 @@ public class ConverterActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_converter, container, false);
+            DatePicker dp = (DatePicker) rootView.findViewById(R.id.datePicker);
+            dp.init(2014, 9, 28, new DateChangedListener());
+            TimePicker tp = (TimePicker) rootView.findViewById(R.id.timePicker);
+            tp.setCurrentHour(13);
+            tp.setCurrentMinute(47);
+            tp.setOnTimeChangedListener(new TimeChangedListener());
             return rootView;
         }
     }
