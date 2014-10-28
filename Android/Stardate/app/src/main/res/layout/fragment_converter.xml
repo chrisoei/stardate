@@ -23,4 +23,12 @@
         android:layout_below="@+id/datePicker"
         android:layout_centerHorizontal="true"
         android:paddingStart="3dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_below="@+id/timePicker"
+        android:paddingStart="3dp"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
