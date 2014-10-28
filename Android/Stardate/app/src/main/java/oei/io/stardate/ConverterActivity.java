@@ -10,12 +10,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -194,6 +196,16 @@ public class ConverterActivity extends Activity {
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
 
+                }
+            });
+            EditText et = (EditText) rootView.findViewById(R.id.editText);
+            et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        updatePickers(v.getRootView());
+                    }
+                    return false;
                 }
             });
             return rootView;
