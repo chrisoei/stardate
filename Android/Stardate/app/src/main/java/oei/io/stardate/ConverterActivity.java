@@ -5,6 +5,11 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,8 +69,50 @@ public class ConverterActivity extends Activity {
         public static int minute;
         public static int timeZone;
 
+        private static long getStartOfYear(int y) {
+            Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"), Locale.ENGLISH);
+            cal.set(Calendar.YEAR, y);
+            cal.set(Calendar.MONTH, Calendar.JANUARY);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            return cal.getTimeInMillis();
+        }
+
         public static void updateStardate(View rootView) {
-            ((EditText)rootView.findViewById(R.id.editText)).setText("2014.987", TextView.BufferType.EDITABLE);
+            TimeZone tz;
+            switch (PlaceholderFragment.timeZone) {
+                case 0:
+                    tz = TimeZone.getTimeZone("America/Los_Angeles");
+                    break;
+                case 1:
+                    tz = TimeZone.getTimeZone("Asia/Kolkata");
+                    break;
+                case 2:
+                    tz = TimeZone.getTimeZone("UTC");
+                    break;
+                default:
+                    throw new RuntimeException("Unknown time zone");
+
+            }
+            Calendar cal = new GregorianCalendar(tz, Locale.ENGLISH);
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, monthOfYear);
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            cal.set(Calendar.MINUTE, minute);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            long millis = cal.getTimeInMillis();
+            double y0 = getStartOfYear(year);
+            double y1 = getStartOfYear(year + 1);
+            double sd = year + (millis - y0) / (y1 - y0);
+            Log.d("stardate", "year = " + year + ", y0 = " + y0 + ", y1 = " + y1 + ", millis = " + millis + ", sd = " + sd);
+            String x = String.format("%.15f", Double.valueOf(sd));
+
+            ((EditText)rootView.findViewById(R.id.editText)).setText(x, TextView.BufferType.EDITABLE);
         }
 
         public static class DateChangedListener implements DatePicker.OnDateChangedListener {
