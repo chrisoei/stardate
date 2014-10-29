@@ -3,6 +3,6 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:windowSoftInputMode="adjustResize"
+    android:windowSoftInputMode="stateVisible"
     tools:context=".ConverterActivity"
     tools:ignore="MergeRootFrame" />

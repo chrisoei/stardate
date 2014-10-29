@@ -3,6 +3,7 @@ package oei.io.stardate;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -184,6 +186,13 @@ public class ConverterActivity extends Activity {
                     return false;
                 }
             });
+            editText.setOnClickListener(new EditText.OnClickListener() {
+                public void onClick(View view) {
+                    InputMethodManager im = (InputMethodManager)(view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE));
+                    im.toggleSoftInput(0, 0);
+                }
+            });
+
             setPickers(getSelectedCalendar());
             return rootView;
         }
