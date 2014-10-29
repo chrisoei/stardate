@@ -117,7 +117,7 @@ public class ConverterActivity extends Activity {
             double y1 = getStartOfYear(year + 1);
             double sd = year + (millis - y0) / (y1 - y0);
             Log.d("stardate", "year = " + year + ", y0 = " + y0 + ", y1 = " + y1 + ", millis = " + millis + ", sd = " + sd);
-            String x = String.format("%.15f", Double.valueOf(sd));
+            String x = String.format("%.15f", sd);
 
             editText.setText(x, TextView.BufferType.EDITABLE);
         }
