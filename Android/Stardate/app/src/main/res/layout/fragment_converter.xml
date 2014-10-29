@@ -15,14 +15,13 @@
         android:paddingStart="3dp"
         android:entries="@array/timezone_names"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
-        android:ems="20"
+        android:ems="15"
         android:id="@+id/editText"
         android:imeOptions="actionDone"
         android:text="2014.1"
