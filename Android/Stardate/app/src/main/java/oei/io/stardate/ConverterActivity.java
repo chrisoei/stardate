@@ -122,6 +122,12 @@ public class ConverterActivity extends Activity {
             editText.setText(x, TextView.BufferType.EDITABLE);
         }
 
+        public static void setPickers(Calendar cal) {
+            datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
+            timePicker.setCurrentMinute(cal.get(Calendar.MINUTE));
+        }
+
         public static void updatePickers(View rootView) {
             double y = Double.parseDouble(((EditText)rootView.findViewById(R.id.editText)).getText().toString());
             int y0 = (int) y;
@@ -130,8 +136,7 @@ public class ConverterActivity extends Activity {
             long millis = (long) (t0 + (t1 - t0) * (y - y0));
             Calendar cal = getSelectedCalendar();
             cal.setTimeInMillis(millis);
-            datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-            timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
+            setPickers(cal);
         }
 
         public PlaceholderFragment() {
@@ -142,15 +147,15 @@ public class ConverterActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_converter, container, false);
             datePicker = (DatePicker) rootView.findViewById(R.id.datePicker);
-            datePicker.init(2014, 9, 28, new DatePicker.OnDateChangedListener() {
-                        @Override
-                        public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            updateStardate();
-                        }
-                    });
+            datePicker.init(2014, 0, 1, new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    updateStardate();
+                }
+             });
             timePicker = (TimePicker) rootView.findViewById(R.id.timePicker);
-            timePicker.setCurrentHour(13);
-            timePicker.setCurrentMinute(47);
+            timePicker.setCurrentHour(1);
+            timePicker.setCurrentMinute(0);
             timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -179,6 +184,7 @@ public class ConverterActivity extends Activity {
                     return false;
                 }
             });
+            setPickers(getSelectedCalendar());
             return rootView;
         }
     }
