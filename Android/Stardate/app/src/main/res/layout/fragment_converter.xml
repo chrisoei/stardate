@@ -14,7 +14,8 @@
         android:id="@+id/spinner"
         android:paddingStart="3dp"
         android:entries="@array/timezone_names"
-        android:layout_below="@+id/timePicker"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -23,13 +24,14 @@
         android:inputType="numberDecimal"
         android:ems="20"
         android:id="@+id/editText"
+        android:imeOptions="actionDone"
         android:text="2014.1"
         android:textIsSelectable="true"
         android:textSize="@dimen/output_size"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:focusableInTouchMode="true"
+        android:layout_below="@+id/spinner"
+        android:layout_centerHorizontal="true" />
 
     <TimePicker
         android:layout_width="wrap_content"
