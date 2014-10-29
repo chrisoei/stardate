@@ -6,8 +6,12 @@
     <string name="action_settings">Settings</string>
     <string-array name="timezone_names">
         <item>Pacific Time</item>
+        <item>Mountain Time</item>
+        <item>Central Time</item>
+        <item>Eastern Time</item>
+        <item>Hawaii Time</item>
         <item>India Standard Time</item>
-        <item>Coordinated Universal Time (UTC)</item>
+        <item>Coordinated Universal Time</item>
     </string-array>
 
 </resources>

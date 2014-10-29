@@ -9,7 +9,9 @@ import android.util.Log;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -71,6 +73,17 @@ public class ConverterActivity extends Activity {
         public static Spinner spinner;
         public static EditText editText;
 
+        public static final Map<String, String> timeZoneMap = new HashMap<String, String>();
+        static {
+            timeZoneMap.put("Pacific Time", "US/Pacific");
+            timeZoneMap.put("Mountain Time", "US/Mountain");
+            timeZoneMap.put("Central Time", "US/Central");
+            timeZoneMap.put("Eastern Time", "US/Eastern");
+            timeZoneMap.put("Hawaii Time", "US/Hawaii");
+            timeZoneMap.put("India Standard Time", "Asia/Kolkata");
+            timeZoneMap.put("Coordinated Universal Time", "UTC");
+        }
+
         public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
         public static final Locale LOCALE = Locale.ENGLISH;
 
@@ -87,17 +100,15 @@ public class ConverterActivity extends Activity {
         }
 
         protected static TimeZone getSelectedTimeZone() {
-            switch (spinner.getSelectedItemPosition()) {
-                case 0:
-                    return TimeZone.getTimeZone("America/Los_Angeles");
-                case 1:
-                    return TimeZone.getTimeZone("Asia/Kolkata");
-                case 2:
-                    return UTC;
-                default:
-                    throw new RuntimeException("Unknown time zone");
-
-            }
+            String tzs = timeZoneMap.get(spinner.getSelectedItem().toString());
+            Log.d("stardate", "tzs = " + tzs);
+            assert tzs != null;
+            if (tzs == null) throw new RuntimeException();
+            TimeZone tz = TimeZone.getTimeZone(tzs);
+            Log.d("stardate", "tz.getID = " + tz.getID());
+            // getTimeZone returns GMT for unknown strings
+            if (tz.getID().equals("GMT") && !tzs.equals("GMT")) throw new RuntimeException();
+            return tz;
         }
 
         protected static Calendar getSelectedCalendar() {
