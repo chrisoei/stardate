@@ -4,7 +4,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.0.2"
     defaultConfig {
-        applicationId "oei.io.stardate"
+        applicationId "io.oei.stardate"
         minSdkVersion 18
         targetSdkVersion 18
         versionCode 1
