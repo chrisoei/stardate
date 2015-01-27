@@ -54,8 +54,8 @@ int main(int argc, char* argv[]) {
   int short_flag = 0;
   int rc = 0;
   char c;
-  static struct timeval tv;
-  static struct stat st;
+  static struct timeval tv = {0};
+  static struct stat st = {0};
   double sd;
 
   while ((c = getopt(argc, argv, "e:g:m:ns")) != -1) {
