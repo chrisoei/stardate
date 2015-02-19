@@ -7,7 +7,9 @@
 
 (defn convert [request]
   (let [ b (req/body-string request)
-         j (json/read-str b)
+         j0 (json/read-str b)
+         zone (get j0 "zone" "America/Los_Angeles")
+         j (dissoc j0 "zone")
          k (first (keys j))
          v (first (vals j))]
     (try
@@ -18,7 +20,7 @@
                (= k "stardate") { "zonedDateTime"
                              (.toString (stardate/toZonedDateTime
                                (Double/parseDouble v)
-                               "America/Los_Angeles"))})
+                               zone))})
          (catch Exception e { "error" (.getMessage e) }))))
 
 (defn handler [request]
