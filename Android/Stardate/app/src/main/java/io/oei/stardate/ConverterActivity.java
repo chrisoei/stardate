@@ -71,6 +71,8 @@ public class ConverterActivity extends Activity {
         public static Spinner spinner;
         public static EditText editText;
 
+
+
         public static final Map<String, String> timeZoneMap = new HashMap<String, String>();
         static {
             timeZoneMap.put("Pacific Time", "US/Pacific");
@@ -84,16 +86,31 @@ public class ConverterActivity extends Activity {
 
         public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
         public static final Locale LOCALE = Locale.ENGLISH;
+        public static final String GMT =  "GMT";
+        public static final String STRING_FORMAT = "%.15f";
+        public static final int PLUS_YEARS = 1;
 
-        private static long getStartOfYear(int y) {
+        public static final int INITIAL_DAY = 1;
+        public static final int INITIAL_HOUR = 0;
+        public static final int INITIAL_MINUTE = 0;
+        public static final int INITIAL_SECOND = 0;
+        public static final int INITIAL_MILLI = 0;
+
+        public static final int START_YEAR = 2014;
+        public static final int START_MONTH = 0;
+        public static final int START_DAY = 1;
+        public static final int START_HOUR = 1;
+        public static final int START_MINUTE = 0;
+
+        private static long getStartOfYear(int year) {
             Calendar cal = new GregorianCalendar(UTC, LOCALE);
-            cal.set(Calendar.YEAR, y);
+            cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, Calendar.JANUARY);
-            cal.set(Calendar.DAY_OF_MONTH, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            cal.set(Calendar.DAY_OF_MONTH, INITIAL_DAY);
+            cal.set(Calendar.HOUR_OF_DAY, INITIAL_HOUR);
+            cal.set(Calendar.MINUTE, INITIAL_MINUTE);
+            cal.set(Calendar.SECOND, INITIAL_SECOND);
+            cal.set(Calendar.MILLISECOND, INITIAL_MILLI);
             return cal.getTimeInMillis();
         }
 
@@ -105,7 +122,7 @@ public class ConverterActivity extends Activity {
             TimeZone tz = TimeZone.getTimeZone(tzs);
             Log.d("stardate", "tz.getID = " + tz.getID());
             // getTimeZone returns GMT for unknown strings
-            if (tz.getID().equals("GMT") && !tzs.equals("GMT")) throw new RuntimeException();
+            if (tz.getID().equals(GMT) && !tzs.equals(GMT)) throw new RuntimeException();
             return tz;
         }
 
@@ -121,14 +138,14 @@ public class ConverterActivity extends Activity {
             cal.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
             cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
             cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            cal.set(Calendar.SECOND, INITIAL_SECOND);
+            cal.set(Calendar.MILLISECOND, INITIAL_MILLI);
             long millis = cal.getTimeInMillis();
             double y0 = getStartOfYear(year);
-            double y1 = getStartOfYear(year + 1);
+            double y1 = getStartOfYear(year + PLUS_YEARS);
             double sd = year + (millis - y0) / (y1 - y0);
             Log.d("stardate", "year = " + year + ", y0 = " + y0 + ", y1 = " + y1 + ", millis = " + millis + ", sd = " + sd);
-            String x = String.format("%.15f", sd);
+            String x = String.format(STRING_FORMAT, sd);
 
             editText.setText(x, TextView.BufferType.EDITABLE);
         }
@@ -143,7 +160,7 @@ public class ConverterActivity extends Activity {
             double y = Double.parseDouble(((EditText)rootView.findViewById(R.id.editText)).getText().toString());
             int y0 = (int) y;
             long t0 = getStartOfYear(y0);
-            long t1 = getStartOfYear(y0 + 1);
+            long t1 = getStartOfYear(y0 + PLUS_YEARS);
             long millis = (long) (t0 + (t1 - t0) * (y - y0));
             Calendar cal = getSelectedCalendar();
             cal.setTimeInMillis(millis);
@@ -155,18 +172,18 @@ public class ConverterActivity extends Activity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_converter, container, false);
             datePicker = (DatePicker) rootView.findViewById(R.id.datePicker);
-            datePicker.init(2014, 0, 1, new DatePicker.OnDateChangedListener() {
+            datePicker.init(START_YEAR, START_MONTH, START_DAY, new DatePicker.OnDateChangedListener() {
                 @Override
                 public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     updateStardate();
                 }
-             });
+            });
             timePicker = (TimePicker) rootView.findViewById(R.id.timePicker);
-            timePicker.setCurrentHour(1);
-            timePicker.setCurrentMinute(0);
+            timePicker.setCurrentHour(START_HOUR);
+            timePicker.setCurrentMinute(START_MINUTE);
             timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
