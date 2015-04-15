@@ -38,13 +38,15 @@
         android:id="@+id/timePicker"
         android:paddingStart="3dp"
         android:layout_below="@+id/datePicker"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:timePickerMode="spinner"/>
 
     <DatePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/datePicker"
         android:calendarViewShown="false"
+        android:datePickerMode="spinner"
         android:layout_below="@+id/editText"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
