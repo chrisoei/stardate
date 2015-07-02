@@ -30,13 +30,10 @@
       t1 (get-start-of-year (inc y))
       t (.toEpochMilli i)
     ]
-    (+ y (/ (double (- t t0)) (- t1 t0)))
-  )
-)
+    (+ y (/ (double (- t t0)) (- t1 t0)))))
 
 (defn now []
-  (ofInstant (Instant/now))
-)
+  (ofInstant (Instant/now)))
 
 (defn ofZonedDateTime [#^ZonedDateTime zdt]
   (let [
@@ -45,9 +42,7 @@
       t1 (get-start-of-year (inc y))
       t (.. zdt toInstant toEpochMilli)
     ]
-    (+ y (/ (double (- t t0)) (- t1 t0)))
-  )
-)
+    (+ y (/ (double (- t t0)) (- t1 t0)))))
 
 (defn toInstant
   [#^Double sd]
@@ -57,15 +52,11 @@
       t1 (get-start-of-year (inc y))
       t (+ t0 (* (- sd y) (- t1 t0)))
     ]
-    (Instant/ofEpochMilli (long t))
-  )
-)
+    (Instant/ofEpochMilli (long t))))
 
 (defn toZonedDateTime
   ([#^Double sd #^String z]
-    (.atZone (toInstant sd) (ZoneId/of z))
-  )
-)
+    (.atZone (toInstant sd) (ZoneId/of z))))
 
 (defmulti of class)
 (defmethod of ZonedDateTime [zdt] (ofZonedDateTime zdt))
@@ -76,35 +67,28 @@
 
 (defn canonical
   ([] (canonical (now)))
-  ([x] (format "%.15f" (of x)))
-)
+  ([x] (format "%.15f" (of x))))
 
 (defn short
   ([] (short (now)))
-  ([x] (format "%.3f" (of x)))
-)
+  ([x] (format "%.3f" (of x))))
 
 (defn ofISO8601
   "Convert ISO8601 string to stardate"
   [#^String x]
-  (of (javax.xml.bind.DatatypeConverter/parseDateTime x))
-)
+  (of (javax.xml.bind.DatatypeConverter/parseDateTime x)))
 
 (let [rfc2822 (SimpleDateFormat.
                "EEE, dd MMM yyyy HH:mm:ss Z"
                Locale/ENGLISH)]
   (defn ofRFC2822 [#^String x]
-    (of (.parse rfc2822 x))
-  )
-)
+    (of (.parse rfc2822 x))))
 
 (let [git-format (SimpleDateFormat.
                "EEE MMM dd HH:mm:ss yyyy Z"
                Locale/ENGLISH)]
   (defn ofGitFormat [#^String x]
-    (of (.parse git-format x))
-  )
-)
+    (of (.parse git-format x))))
 
 (defmulti ofString count)
 (defmethod ofString 31 [x] (ofRFC2822 x))
