@@ -4,7 +4,6 @@
 (import '(java.text SimpleDateFormat))
 (import '(java.util Locale))
 
-
 (def utc (ZoneId/of "UTC"))
 
 (def ^:private get-start-of-year
