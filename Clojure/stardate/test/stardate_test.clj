@@ -1,7 +1,7 @@
 (ns stardate-test
-  (:refer-clojure :exclude [second short])
+  (:refer-clojure)
   (:require [clojure.test :refer :all]
-            [stardate :refer :all]))
+            [stardate :as sd]))
 
 (import '(java.time Instant ZonedDateTime ZoneId))
 
@@ -17,42 +17,42 @@
 
 (deftest ofZonedDateTime-test
   (testing "ofZonedDateTime 30 Sep 2014 17:17:27 -0700"
-    (approx (stardate/ofZonedDateTime zdt-fixture) stardate-fixture)))
+    (approx (sd/ofZonedDateTime zdt-fixture) stardate-fixture)))
 
 (deftest short-test
   (testing "short"
-    (is (= "2014.748" (stardate/short stardate-fixture)))))
+    (is (= "2014.748" (sd/short stardate-fixture)))))
 
 (deftest ofInstant-test
   (testing "ofInstant 30 Sep 2014 17:17:27 -0700"
-    (approx (stardate/ofInstant i-fixture) stardate-fixture)))
+    (approx (sd/ofInstant i-fixture) stardate-fixture)))
 
 (deftest ofISO8601-test
   (testing "ofISO8601 2014-09-30T17:17:27-07:00"
-    (approx (stardate/ofISO8601 "2014-09-30T17:17:27-07:00")
+    (approx (sd/ofISO8601 "2014-09-30T17:17:27-07:00")
             stardate-fixture)))
 
 (deftest ofRFC2822-test
   (testing "ofRFC2822 Tue, 30 Sep 2014 17:17:27 -0700"
-    (approx (stardate/ofRFC2822 "Tue, 30 Sep 2014 17:17:27 -0700")
+    (approx (sd/ofRFC2822 "Tue, 30 Sep 2014 17:17:27 -0700")
             stardate-fixture)))
 
 (deftest ofGitFormat-test
   (testing "ofGitFormat Tue Sep 30 17:17:27 2014 -0700"
-    (approx (stardate/ofGitFormat "Tue Sep 30 17:17:27 2014 -0700")
+    (approx (sd/ofGitFormat "Tue Sep 30 17:17:27 2014 -0700")
             stardate-fixture)))
 
 (deftest of-on-short-git-format
   (testing "of Thu Jul 2 04:36:36 2015 +0000"
-    (approx (stardate/of "Thu Jul 2 04:36:36 2015 +0000")
+    (approx (sd/of "Thu Jul 2 04:36:36 2015 +0000")
             2015.499156392694)))
 
 (deftest of-on-possibly-short-rfc2822-format
   (testing "of Thu, 02 Jul 2015 04:51:24 +0000"
-    (approx (stardate/of "Thu, 02 Jul 2015 04:51:24 +0000")
+    (approx (sd/of "Thu, 02 Jul 2015 04:51:24 +0000")
             2015.4991845509894))
   (testing "of Thu,  2 Jul 2015 04:53:46 +0000"
-    (approx (stardate/of "Thu,  2 Jul 2015 04:53:46 +0000")
+    (approx (sd/of "Thu,  2 Jul 2015 04:53:46 +0000")
                          2015.49918905378)))
 
 ; The standard Java libraries will not parse
@@ -60,25 +60,25 @@
 (deftest of-on-unparseable-iso-8601-format
   (testing "of 2015-07-02T05:02:28+0000"
     (is (thrown? IllegalArgumentException
-        (stardate/of "2015-07-02T05:02:28+0000")))))
+        (sd/of "2015-07-02T05:02:28+0000")))))
 
 (deftest of-test
   (testing "of ZonedDateTime 30 Sep 2014 17:17:27 -0700"
-    (approx (stardate/of zdt-fixture) stardate-fixture))
+    (approx (sd/of zdt-fixture) stardate-fixture))
   (testing "of Instant 30 Sep 2014 17:17:27 -0700"
-    (approx (stardate/of i-fixture) stardate-fixture)))
+    (approx (sd/of i-fixture) stardate-fixture)))
 
 (deftest now-test
   (testing "now"
-    (approx (stardate/now) (stardate/ofZonedDateTime (ZonedDateTime/now)))))
+    (approx (sd/now) (sd/ofZonedDateTime (ZonedDateTime/now)))))
 
 (deftest toInstant-test
   (testing "toInstant 2014.747978420491791"
     (is (= epoch-milli-fixture
-      (.toEpochMilli (stardate/toInstant stardate-fixture))))))
+      (.toEpochMilli (sd/toInstant stardate-fixture))))))
 
 (deftest toZonedDateTime-test
   (testing "toZonedDateTime 2014.747978420491791 pt"
     (is (= epoch-milli-fixture
-      (.. (stardate/toZonedDateTime stardate-fixture "US/Pacific")
+      (.. (sd/toZonedDateTime stardate-fixture "US/Pacific")
         toInstant toEpochMilli)))))
