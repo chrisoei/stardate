@@ -54,6 +54,11 @@
   )
 )
 
+(deftest of-on-short-git-format
+  (testing "of Thu Jul 2 04:36:36 2015 +0000"
+    (approx (stardate/of "Thu Jul 2 04:36:36 2015 +0000")
+            2015.499156392694)))
+
 (deftest of-test
   (testing "of ZonedDateTime 30 Sep 2014 17:17:27 -0700"
     (approx (stardate/of zdt-fixture) stardate-fixture)
