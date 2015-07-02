@@ -16,6 +16,10 @@ user=> (sd/short)
 "2015.499"
 user=> (sd/canonical)
 "2015.499250137905800"
+user=> (sd/toZonedDateTime 2015.499 "America/Los_Angeles")
+#object[java.time.ZonedDateTime 0x4acb8b2d "2015-07-01T20:14:24-07:00[America/Los_Angeles]"]
+user=> (sd/toInstant 2015.499)
+#object[java.time.Instant 0x20e8802f "2015-07-02T03:14:24Z"]
 ```
 
 ## License
