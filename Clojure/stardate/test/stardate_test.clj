@@ -68,6 +68,21 @@
   (testing "of Instant 30 Sep 2014 17:17:27 -0700"
     (approx (sd/of i-fixture) stardate-fixture)))
 
+(deftest of-list-test-full
+  (testing "of 2014 9 30 17 17 27 America/Los_Angeles"
+    (approx (sd/of 2014 9 30 17 17 27 "America/Los_Angeles")
+            stardate-fixture)))
+
+(deftest of-list-test-date-and-zone-only
+  (testing "of 2014 9 30 America/Los_Angeles"
+    (approx (sd/of 2014 9 30 "America/Los_Angeles")
+            2014.7473744292238)))
+
+(deftest of-list-test-date-only
+  (testing "of 2014 9 30"
+    (approx (sd/of 2014 9 30)
+            2014.7465753424658)))
+
 (deftest now-test
   (testing "now"
     (approx (sd/now) (sd/ofZonedDateTime (ZonedDateTime/now)))))

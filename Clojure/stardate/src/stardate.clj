@@ -57,12 +57,20 @@
   ([#^Double sd #^String z]
     (.atZone (toInstant sd) (ZoneId/of z))))
 
-(defmulti of class)
+(defmulti of (fn [x & r] (class x)))
 (defmethod of ZonedDateTime [zdt] (ofZonedDateTime zdt))
 (defmethod of Instant [i] (ofInstant i))
 (defmethod of Double [sd] sd)
 (defmethod of java.util.GregorianCalendar [gc] (of (.toZonedDateTime gc)))
 (defmethod of java.util.Date [d] (of (.toInstant d)))
+(defmethod of Long
+  ([y m d h mi s z]
+    (of (ZonedDateTime/of
+          y m d h mi s 0 (ZoneId/of z))))
+  ([y m d z]
+     (of y m d 12 0 0 z))
+  ([y m d]
+     (of y m d "UTC")))
 
 (defn canonical
   ([] (canonical (now)))
