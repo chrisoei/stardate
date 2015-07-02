@@ -59,6 +59,14 @@
     (approx (stardate/of "Thu Jul 2 04:36:36 2015 +0000")
             2015.499156392694)))
 
+(deftest of-on-possibly-short-rfc2822-format
+  (testing "of Thu, 02 Jul 2015 04:51:24 +0000"
+    (approx (stardate/of "Thu, 02 Jul 2015 04:51:24 +0000")
+            2015.4991845509894))
+  (testing "of Thu,  2 Jul 2015 04:53:46 +0000"
+    (approx (stardate/of "Thu,  2 Jul 2015 04:53:46 +0000")
+                         2015.49918905378)))
+
 (deftest of-test
   (testing "of ZonedDateTime 30 Sep 2014 17:17:27 -0700"
     (approx (stardate/of zdt-fixture) stardate-fixture)
