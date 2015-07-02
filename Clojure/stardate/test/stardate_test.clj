@@ -67,6 +67,13 @@
     (approx (stardate/of "Thu,  2 Jul 2015 04:53:46 +0000")
                          2015.49918905378)))
 
+; The standard Java libraries will not parse
+; all forms of ISO-8601 correctly.
+(deftest of-on-unparseable-iso-8601-format
+  (testing "of 2015-07-02T05:02:28+0000"
+    (is (thrown? IllegalArgumentException
+        (stardate/of "2015-07-02T05:02:28+0000")))))
+
 (deftest of-test
   (testing "of ZonedDateTime 30 Sep 2014 17:17:27 -0700"
     (approx (stardate/of zdt-fixture) stardate-fixture)

@@ -111,5 +111,6 @@
 (defmethod ofString 30 [x] (ofGitFormat x))
 (defmethod ofString 29 [x] (ofGitFormat x))
 (defmethod ofString 25 [x] (ofISO8601 x))
+(defmethod ofString 24 [x] (ofISO8601 x))
 
 (defmethod of String [x] (ofString x))
