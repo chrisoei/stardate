@@ -57,7 +57,17 @@
   ([#^Double sd #^String z]
     (.atZone (toInstant sd) (ZoneId/of z))))
 
-(defmulti of (fn [x & r] (class x)))
+(defmulti of
+  "(of x) will convert a ZonedDateTime, Instant, Double,
+  GregorianCalendar, or java.util.Date.
+  (of y m d h mi s z) works with z set to America/Los_Angeles or Asia/Shanghai.
+  (of y m d h mi s) assumes UTC time zone.
+  (of y m d z) assumes the time is noon.
+  (of y m d) assumes noon time and UTC time zone.
+  (of \"2014-09-30T17:17:27-07:00\") works on SOME ISO8601 strings.
+  (of \"Tue, 30 Sep 2014 17:17:27 -0700\") works on RFC2822.
+  (of \"Tue Sep 30 17:17:27 2014 -0700\") works on git dates."
+  (fn [x & r] (class x)))
 (defmethod of ZonedDateTime [zdt] (ofZonedDateTime zdt))
 (defmethod of Instant [i] (ofInstant i))
 (defmethod of Double [sd] sd)
