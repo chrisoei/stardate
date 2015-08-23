@@ -80,6 +80,7 @@ public class ConverterActivity extends Activity {
             timeZoneMap.put("Central Time", "US/Central");
             timeZoneMap.put("Eastern Time", "US/Eastern");
             timeZoneMap.put("Hawaii Time", "US/Hawaii");
+            timeZoneMap.put("China Standard Time", "Asia/Shanghai");
             timeZoneMap.put("India Standard Time", "Asia/Kolkata");
             timeZoneMap.put("Coordinated Universal Time", "UTC");
         }
@@ -96,7 +97,7 @@ public class ConverterActivity extends Activity {
         public static final int INITIAL_SECOND = 0;
         public static final int INITIAL_MILLI = 0;
 
-        public static final int START_YEAR = 2014;
+        public static final int START_YEAR = 2015;
         public static final int START_MONTH = 0;
         public static final int START_DAY = 1;
         public static final int START_HOUR = 1;
