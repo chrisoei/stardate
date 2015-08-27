@@ -1,4 +1,4 @@
-package io.oei.stardate;
+package me.oei.stardate;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

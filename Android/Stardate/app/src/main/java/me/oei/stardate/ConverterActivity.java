@@ -1,4 +1,4 @@
-package io.oei.stardate;
+package me.oei.stardate;
 
 import android.app.Activity;
 import android.app.Fragment;
