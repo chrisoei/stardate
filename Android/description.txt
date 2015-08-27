@@ -1,0 +1,4 @@
+Date and time represented as fractional years at Coordinated Universal Time.
+
+This app converts standard representations of date and time to a representation using fractional years. For example, 2015.5 is midway between the start of 2015 and the end of 2015 in Coordinated Universal Time.
+
